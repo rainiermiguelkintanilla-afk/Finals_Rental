@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rent Your Happy Place{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/rentals.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+{% block body %}
+<header class="rc-header">
+    <div class="rc-container rc-header-inner">
+        <a class="rc-logo" href="#">
+            <img src="{{ asset('img/logo1.png') }}" alt="RentCafe" />
+        </a>
+        <div class="rc-actions">
+            <a href="{{ path('app_login') }}" class="rc-btn rc-btn-navy">Login</a>
+        </div>
+    </div>
+    <section class="rc-hero">
+        <div class="rc-container rc-hero-inner">
+            <h1 class="rc-hero-title">Rent Your Happy Place</h1>
+            <p class="rc-hero-sub">Join millions of renters who trust our site to find their new home.</p>
+            <form class="rc-search" action="#" method="get">
+                <input class="rc-search-input" type="text" name="q" placeholder="Where are you moving? What are you looking for?" aria-label="Search" />
+                <button class="rc-btn rc-btn-primary" type="submit">Search</button>
+            </form>
+        </div>
+    </section>
+    <div class="rc-hero-decoration" aria-hidden="true"></div>
+    <div class="rc-hero-overlay" aria-hidden="true"></div>
+    <div class="rc-hero-bg" aria-hidden="true"></div>
+    
+</header>
+{% endblock %}

@@ -1,0 +1,62 @@
+/* Fonts */
+@font-face {
+  font-family: 'Sitka';
+  src: url('/fonts/SITKAVF-Small.TTF') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Sitka';
+  src: url('/fonts/SITKAVF-SmallBold.TTF') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Base layout */
+.rc-container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+.rc-btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 12px 22px; font-weight: 600; cursor: pointer; text-decoration: none; }
+.rc-btn-primary { background: #0b1a3a; color: #fff; border: 1px solid #0b1a3a; box-shadow: 0 4px 14px rgba(0,0,0,.15); }
+.rc-btn-outline { background: transparent; color: #123; border: 1px solid rgba(255,255,255,.35); }
+.rc-btn-navy { background: #0b1a3a; color: #ffffff; border: 1px solid #0b1a3a; }
+.rc-link { color: #0bc; text-decoration: none; font-weight: 600; }
+body { font-family: 'Sitka', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+
+/* Header */
+.rc-header { position: relative; color: #fff; }
+.rc-header-inner { height: 64px; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 5; }
+.rc-logo img { height: 36px; display: block; }
+.rc-nav { display: flex; gap: 20px; }
+.rc-nav-link { color: #123; text-decoration: none; font-weight: 600; }
+.rc-actions { display: flex; gap: 10px; position: relative; z-index: 5; }
+.rc-menu { width: 40px; height: 40px; border-radius: 8px; border: 1px solid rgba(0,0,0,.08); background: #fff; display: inline-flex; align-items: center; justify-content: center; gap: 3px; }
+.rc-menu span { width: 16px; height: 2px; background: #333; display: block; }
+
+/* Rewards strip */
+.rc-rewards { background: #0e9fb0; }
+.rc-rewards-inner { display: flex; align-items: center; gap: 24px; padding: 10px 0; }
+.rc-rewards-title { font-weight: 700; }
+.rc-rewards-list { list-style: none; display: flex; gap: 16px; padding: 0; margin: 0; }
+.rc-rewards-list li { display: inline-flex; gap: 6px; align-items: center; }
+
+/* Hero */
+.rc-hero { position: relative; padding: 72px 0 140px; color: #eaf3ef; overflow: hidden; background: radial-gradient(1200px 600px at 70% 20%, rgba(255,255,255,.06), transparent) , #0f2a2a; }
+.rc-hero-bg { position: absolute; inset: 0; background: url('../img/hero-img-1.jpg') center/cover no-repeat; opacity: .08; z-index: 0; pointer-events: none; }
+.rc-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.35) 100%); pointer-events: none; z-index: 0; }
+.rc-hero-decoration { position: absolute; inset: auto 0 0 0; height: 220px; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%230f2a2a" fill-opacity="1" d="M0,192L60,197.3C120,203,240,213,360,218.7C480,224,600,224,720,213.3C840,203,960,181,1080,165.3C1200,149,1320,139,1380,133.3L1440,128L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>') bottom/cover no-repeat; z-index: 0; pointer-events: none; }
+.rc-hero-inner { position: relative; z-index: 3; text-align: center; }
+.rc-hero-title { font-size: 56px; line-height: 1.1; margin: 0 0 12px; font-weight: 700; font-family: 'Sitka', sans-serif; }
+.rc-hero-sub { margin: 0 0 24px; font-size: 18px; color: #cfe1d5; }
+
+/* Search */
+.rc-search { display: flex; gap: 10px; align-items: center; justify-content: center; max-width: 920px; margin: 0 auto; background: #fff; padding: 10px; border-radius: 999px; box-shadow: 0 12px 40px rgba(0,0,0,.25); }
+.rc-search-input { flex: 1; min-width: 0; border: none; outline: none; font-size: 16px; padding: 14px 18px; border-radius: 999px; }
+
+@media (max-width: 768px) {
+  .rc-hero-title { font-size: 36px; }
+  .rc-header-inner { gap: 8px; }
+  .rc-rewards-inner { flex-wrap: wrap; gap: 12px; }
+  .rc-search { flex-direction: column; border-radius: 24px; padding: 14px; }
+  .rc-btn { width: 100%; }
+}
