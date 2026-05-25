@@ -1,14 +1,14 @@
 /* Fonts */
 @font-face {
   font-family: 'Sitka';
-  src: url('../../fonts/SITKAVF-Small.TTF') format('truetype');
+  src: url('/fonts/SITKAVF-Small.TTF') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Sitka';
-  src: url('../../fonts/SITKAVF-SmallBold.TTF') format('truetype');
+  src: url('/fonts/SITKAVF-SmallBold.TTF') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;

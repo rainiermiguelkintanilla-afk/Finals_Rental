@@ -7,18 +7,18 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" type="image/png" href="{{ asset('img/secondarylogo.png') }}">
         {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('styles/public-theme.css') }}">
+        <link rel="stylesheet" href="/css/public-theme.css">
         <style>
             @font-face {
                 font-family: 'SITKAVF';
-                src: url('{{ asset('fonts/SITKAVF-Small.TTF') }}') format('truetype');
+                src: url('/fonts/SITKAVF-Small.TTF') format('truetype');
                 font-weight: normal;
                 font-style: normal;
             }
 
             @font-face {
                 font-family: 'SITKAVF';
-                src: url('{{ asset('fonts/SITKAVF-SmallBold.TTF') }}') format('truetype');
+                src: url('/fonts/SITKAVF-SmallBold.TTF') format('truetype');
                 font-weight: bold;
                 font-style: normal;
             }
