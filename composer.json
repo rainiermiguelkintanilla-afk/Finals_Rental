@@ -7,6 +7,8 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-pdo_mysql": "*",
+        "ext-pdo_mysql": "*",
         "api-platform/doctrine-orm": "^4.2",
         "api-platform/symfony": "^4.2",
         "doctrine/dbal": "^3",

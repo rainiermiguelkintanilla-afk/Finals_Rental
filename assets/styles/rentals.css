@@ -42,7 +42,7 @@ body { font-family: 'Sitka', system-ui, -apple-system, Segoe UI, Roboto, Arial, 
 
 /* Hero */
 .rc-hero { position: relative; padding: 72px 0 140px; color: #eaf3ef; overflow: hidden; background: radial-gradient(1200px 600px at 70% 20%, rgba(255,255,255,.06), transparent) , #0f2a2a; }
-.rc-hero-bg { position: absolute; inset: 0; background: url('../img/hero-img-1.jpg') center/cover no-repeat; opacity: .08; z-index: 0; pointer-events: none; }
+.rc-hero-bg { position: absolute; inset: 0; background: url('../img/apt2.jpg') center/cover no-repeat; opacity: .08; z-index: 0; pointer-events: none; }
 .rc-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.35) 100%); pointer-events: none; z-index: 0; }
 .rc-hero-decoration { position: absolute; inset: auto 0 0 0; height: 220px; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%230f2a2a" fill-opacity="1" d="M0,192L60,197.3C120,203,240,213,360,218.7C480,224,600,224,720,213.3C840,203,960,181,1080,165.3C1200,149,1320,139,1380,133.3L1440,128L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>') bottom/cover no-repeat; z-index: 0; pointer-events: none; }
 .rc-hero-inner { position: relative; z-index: 3; text-align: center; }
