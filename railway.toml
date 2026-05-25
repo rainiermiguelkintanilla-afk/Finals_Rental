@@ -1,0 +1,7 @@
+# Railway — Symfony (see https://docs.railway.com/guides/symfony)
+[build]
+builder = "RAILPACK"
+
+[deploy]
+healthcheckPath = "/"
+restartPolicyType = "ON_FAILURE"
