@@ -1,0 +1,187 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Add New Payment - Rental Management{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/rentals.css') }}">
+    <style>
+        .new-payment-container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .page-header { margin-bottom: 24px; background: white; padding: 18px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .page-title { font-size: 22px; font-weight: 700; margin: 0; }
+        .form-container { background: white; border-radius: 12px; padding: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .form-section { margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
+        .section-title { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
+        .form-group { margin-bottom: 16px; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+        .form-control:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.08); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .btn { padding: 10px 18px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; }
+        .btn-primary { background: #667eea; color: #fff; }
+        .btn-secondary { background: #e0e0e0; color: #333; }
+        .form-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:18px; }
+        .field-error { color:#ef4444; font-size:12px; margin-top:6px; }
+        @media (max-width:768px) { .form-row { grid-template-columns: 1fr; } .form-actions { flex-direction: column; } }
+    </style>
+{% endblock %}
+
+{% block header_title %}Add New Payment{% endblock %}
+
+{% block dashboard_content %}
+<div class="new-payment-container">
+    <div class="page-header">
+        <h1 class="page-title">➕ Add New Payment</h1>
+    </div>
+
+    <div class="form-container">
+        {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.amount, 'Amount') }}
+                    {{ form_widget(form.amount, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.amount) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.paymentDate, 'Payment Date') }}
+                    {{ form_widget(form.paymentDate, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.paymentDate) }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.dueDate, 'Due Date') }}
+                    {{ form_widget(form.dueDate, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.dueDate) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.status, 'Status') }}
+                    {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.status) }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.paymentMethod, 'Payment Method') }}
+                    {{ form_widget(form.paymentMethod, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.paymentMethod) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.tenant, 'Tenant') }}
+                    {{ form_widget(form.tenant, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.tenant) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.apartment, 'Apartment') }}
+                {{ form_widget(form.apartment, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.apartment) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.notes, 'Notes') }}
+                {{ form_widget(form.notes, {'attr': {'class': 'form-control', 'rows': 3}}) }}
+                {{ form_errors(form.notes) }}
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ path('app_payment_index') }}" class="btn btn-secondary">Cancel</a>
+                {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+    (function(){
+        const form = document.querySelector('form');
+        if (!form) return;
+
+        // Client-side validation for negative values
+        const amountInput = form.querySelector('input[name="payment[amount]"]');
+        if (amountInput) {
+            amountInput.addEventListener('input', function(e) {
+                const value = parseFloat(e.target.value);
+                if (value < 0) {
+                    e.target.setCustomValidity('Payment amount cannot be negative.');
+                    e.target.reportValidity();
+                } else {
+                    e.target.setCustomValidity('');
+                }
+            });
+
+            amountInput.addEventListener('blur', function(e) {
+                const value = parseFloat(e.target.value);
+                if (isNaN(value) || value < 0) {
+                    e.target.setCustomValidity('Payment amount cannot be negative.');
+                    e.target.reportValidity();
+                } else {
+                    e.target.setCustomValidity('');
+                }
+            });
+        }
+
+        form.addEventListener('submit', function(e){
+            // Validate amount before submission
+            if (amountInput) {
+                const value = parseFloat(amountInput.value);
+                if (isNaN(value) || value < 0) {
+                    e.preventDefault();
+                    amountInput.setCustomValidity('Payment amount cannot be negative.');
+                    amountInput.reportValidity();
+                    return;
+                }
+            }
+
+            e.preventDefault();
+            const btn = form.querySelector('button[type=submit]');
+            if (btn) btn.disabled = true;
+            const data = new FormData(form);
+
+            fetch(form.action, {
+                method: form.method || 'POST',
+                body: data,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+            }).then(r => r.json())
+              .then(json => {
+                  if (json && json.success) {
+                      fetch('{{ path('app_dashboard_index') }}', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                        .then(r => r.text())
+                        .then(html => {
+                            try {
+                                const parser = new DOMParser();
+                                const doc = parser.parseFromString(html, 'text/html');
+                                const newContent = doc.querySelector('.content');
+                                const oldContent = document.querySelector('.content');
+                                if (newContent && oldContent) oldContent.innerHTML = newContent.innerHTML;
+                            } catch (err) { console.error('Failed to replace dashboard content', err); }
+                            const message = document.createElement('div');
+                            message.className = 'flash-success';
+                            message.textContent = 'Payment added successfully.';
+                            form.parentElement.insertBefore(message, form);
+                            form.remove();
+                        });
+                  } else {
+                      alert('Failed to create payment.');
+                      if (btn) btn.disabled = false;
+                  }
+              }).catch(err => {
+                  console.error(err);
+                  alert('An error occurred');
+                  if (btn) btn.disabled = false;
+              });
+        });
+    })();
+    </script>
+{% endblock %}

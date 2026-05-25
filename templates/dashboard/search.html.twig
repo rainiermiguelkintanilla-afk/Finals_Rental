@@ -1,0 +1,127 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Search Results - Dashboard{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .apartment-search-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .apartment-search-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+        .apartment-search-card:hover img {
+            transform: scale(1.05);
+        }
+        .apartment-search-card img {
+            transition: transform 0.3s ease;
+        }
+    </style>
+{% endblock %}
+
+{% block header_title %}Search Results{% endblock %}
+
+{% block dashboard_content %}
+<div style="padding: 20px;">
+    {% if query %}
+        <div style="margin-bottom: 20px;">
+            <h2 style="color: #333; margin-bottom: 10px;">Search results for: "<strong>{{ query }}</strong>"</h2>
+            <p style="color: #666;">Found <strong>{{ total_results }}</strong> result(s)</p>
+        </div>
+
+        {% if total_results == 0 %}
+            <div style="text-align: center; padding: 40px; background: white; border-radius: 8px;">
+                <p style="color: #666; font-size: 18px;">No results found for "{{ query }}"</p>
+                <p style="color: #999; margin-top: 10px;">Try searching with different keywords</p>
+            </div>
+        {% else %}
+            <!-- Apartments Results -->
+            {% if results.apartments|length > 0 %}
+                <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                    <h3 style="color: #333; margin-bottom: 15px; font-size: 18px;">Apartments ({{ results.apartments|length }})</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+                        {% for apartment in results.apartments %}
+                            {% set imageFiles = ['apt3.jpg', 'apt4.jpg', 'apt5.jpg', 'apt6.jpg', 'apt7.jpg', 'apt8.jpg'] %}
+                            {% set imageIndex = (apartment.id - 1) % imageFiles|length %}
+                            {% set imageFile = imageFiles[imageIndex] %}
+                            <div class="apartment-search-card" style="border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; background: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                                <div style="width: 100%; height: 200px; overflow: hidden;">
+                                    <img src="{{ asset('img/' ~ imageFile) }}" alt="{{ apartment.name ?? 'Apartment' }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div style="padding: 15px;">
+                                    <div style="font-weight: 600; color: #333; margin-bottom: 5px; font-size: 16px;">{{ apartment.name ?? 'N/A' }}</div>
+                                    <div style="color: #666; font-size: 14px; margin-bottom: 10px;">{{ apartment.address ?? 'N/A' }}</div>
+                                    <div style="color: #20b2aa; font-weight: 600; font-size: 18px; margin-bottom: 10px;">{{ apartment.rentAmount|peso }}/month</div>
+                                    <a href="{{ path('app_apartment_show', {'id': apartment.id}) }}" style="display: inline-block; margin-top: 10px; padding: 8px 20px; background: #20b2aa; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; transition: background 0.3s;">View Details</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Tenants Results -->
+            {% if results.tenants|length > 0 %}
+                <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                    <h3 style="color: #333; margin-bottom: 15px; font-size: 18px;">Tenants ({{ results.tenants|length }})</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+                        {% for tenant in results.tenants %}
+                            <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px;">
+                                <div style="font-weight: 600; color: #333; margin-bottom: 5px;">{{ tenant.fullName ?? 'N/A' }}</div>
+                                <div style="color: #666; font-size: 14px; margin-bottom: 5px;">{{ tenant.email ?? 'N/A' }}</div>
+                                <div style="color: #666; font-size: 14px;">{{ tenant.phone ?? 'N/A' }}</div>
+                                <a href="{{ path('app_tenant_show', {'id': tenant.id}) }}" style="display: inline-block; margin-top: 10px; padding: 5px 15px; background: #20b2aa; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">View</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Payments Results -->
+            {% if results.payments|length > 0 %}
+                <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                    <h3 style="color: #333; margin-bottom: 15px; font-size: 18px;">Payments ({{ results.payments|length }})</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+                        {% for payment in results.payments %}
+                            <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px;">
+                                <div style="font-weight: 600; color: #333; margin-bottom: 5px;">Payment #{{ payment.id }}</div>
+                                <div style="color: #666; font-size: 14px; margin-bottom: 5px;">Amount: {{ payment.amount|peso }}</div>
+                                <div style="color: #666; font-size: 14px;">Status: {{ payment.status ? payment.status|title : 'N/A' }}</div>
+                                <a href="{{ path('app_payment_show', {'id': payment.id}) }}" style="display: inline-block; margin-top: 10px; padding: 5px 15px; background: #20b2aa; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">View</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Leases Results -->
+            {% if results.leases|length > 0 %}
+                <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                    <h3 style="color: #333; margin-bottom: 15px; font-size: 18px;">Leases ({{ results.leases|length }})</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+                        {% for lease in results.leases %}
+                            <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px;">
+                                <div style="font-weight: 600; color: #333; margin-bottom: 5px;">Lease #{{ lease.id }}</div>
+                                {% if lease.tenant %}
+                                    <div style="color: #666; font-size: 14px; margin-bottom: 5px;">Tenant: {{ lease.tenant.fullName ?? 'N/A' }}</div>
+                                {% endif %}
+                                {% if lease.apartment %}
+                                    <div style="color: #666; font-size: 14px;">Apartment: {{ lease.apartment.name ?? 'N/A' }}</div>
+                                {% endif %}
+                                <a href="{{ path('app_lease_show', {'id': lease.id}) }}" style="display: inline-block; margin-top: 10px; padding: 5px 15px; background: #20b2aa; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">View</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <div style="text-align: center; padding: 40px; background: white; border-radius: 8px;">
+            <p style="color: #666; font-size: 18px;">Please enter a search term</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

@@ -1,4 +1,9 @@
 
+###> Node ###
+/node_modules/
+/server/node_modules/
+/mobile/node_modules/
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -19,3 +24,7 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

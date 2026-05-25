@@ -1,20 +1,274 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LoginController!{% endblock %}
+{% block title %}Login - Rental Apartment{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @font-face {
+            font-family: 'SITKAVF';
+            src: url('{{ asset('fonts/SITKAVF-Small.TTF') }}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'SITKAVF';
+            src: url('{{ asset('fonts/SITKAVF-SmallBold.TTF') }}') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SITKAVF', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Use a small image only — apt2.jpg is ~16MB and crashes the browser as a full-page background */
+            background: linear-gradient(135deg, rgba(10, 26, 46, 0.92), rgba(22, 33, 62, 0.88)),
+                url('{{ asset('img/Community.jpg') }}') center / cover no-repeat;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 90px; /* fixed global navbar */
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26, 75, 92, 0.4);
+            z-index: 1;
+        }
+
+        .auth-page {
+            min-height: calc(100vh - 90px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+
+        /* Login Container */
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 50px;
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-title {
+            font-size: 32px;
+            color: #1a4b5c;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .login-subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #20b2aa;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(32, 178, 170, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: #999;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #20b2aa, #008b8b);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(32, 178, 170, 0.3);
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .forgot-password a {
+            color: #20b2aa;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .signup-link {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .signup-link a {
+            color: #20b2aa;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+ 
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-container {
+                margin: 20px;
+                padding: 30px;
+            }
+            
+            .login-title {
+                font-size: 28px;
+            }
+            
+            .furniture-section {
+                display: none;
+            }
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<!-- Login Form -->
+<div class="auth-page">
+<div class="login-container">
+    <div class="login-header">
+        <h1 class="login-title">Welcome Back</h1>
+        <p class="login-subtitle">Sign in to your Rainier's Real Estate account</p>
+    </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    {% if error %}
+        <div style="background: #fee; color: #c33; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #fcc;">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+    {% endif %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/raini/rainier/src/Controller/LoginController.php</code></li>
-        <li>Your template at <code>C:/Users/raini/rainier/templates/login/index.html.twig</code></li>
-    </ul>
+    {% for message in app.flashes('info') %}
+        <div style="background: #ecfdf5; color: #065f46; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #a7f3d0;">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <form method="post" action="{{ path('app_login') }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <div class="form-group">
+            <label for="inputEmail" class="form-label">Email Address</label>
+            <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control" placeholder="Enter your email" required autofocus>
+        </div>
+
+        <div class="form-group">
+            <label for="inputPassword" class="form-label">Password</label>
+            <input type="password" name="_password" id="inputPassword" class="form-control" placeholder="Enter your password" required>
+        </div>
+
+        <button type="submit" class="login-btn">Sign In</button>
+
+        <div style="text-align: center; margin-top: 14px;">
+            <a
+                href="{{ path('hwi_oauth_service_redirect', { service: 'google' }) }}"
+                style="
+                    display: inline-block;
+                    padding: 12px 18px;
+                    border-radius: 999px;
+                    border: 2px solid #20b2aa;
+                    color: #0a1a2e;
+                    background: rgba(255,255,255,0.9);
+                    text-decoration: none;
+                    font-weight: 700;
+                "
+            >
+                Continue with Google
+            </a>
+        </div>
+
+        <div class="forgot-password">
+            <a href="#">Forgot your password?</a>
+        </div>
+
+        <div class="signup-link">
+            Don't have an account? <a href="{{ path('app_register') }}">Sign up here</a>
+        </div>
+    </form>
+</div>
+
+<!-- Furniture Decorations -->
+<div class="furniture-section">
+    <div class="furniture-group">
+        <div class="chair"></div>
+        <div class="table"></div>
+        <div class="plant"></div>
+    </div>
+    <div class="furniture-group">
+        <div class="sofa"></div>
+    </div>
+    <div class="furniture-group">
+        <div class="chair"></div>
+        <div class="table"></div>
+        <div class="plant"></div>
+    </div>
+</div>
 </div>
 {% endblock %}

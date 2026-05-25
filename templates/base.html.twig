@@ -2,9 +2,188 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <meta name="theme-color" content="#0a1a2e">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <link rel="icon" type="image/png" href="{{ asset('img/secondarylogo.png') }}">
         {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('styles/public-theme.css') }}">
+        <style>
+            @font-face {
+                font-family: 'SITKAVF';
+                src: url('{{ asset('fonts/SITKAVF-Small.TTF') }}') format('truetype');
+                font-weight: normal;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: 'SITKAVF';
+                src: url('{{ asset('fonts/SITKAVF-SmallBold.TTF') }}') format('truetype');
+                font-weight: bold;
+                font-style: normal;
+            }
+
+            html {
+                -webkit-text-size-adjust: 100%;
+                text-size-adjust: 100%;
+            }
+
+            body {
+                font-family: 'SITKAVF', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #0a1a2e, #16213e, #1e3a5f);
+                color: white;
+                margin: 0;
+                padding: 0;
+                min-height: 100vh;
+                overflow-x: hidden;
+            }
+
+            /* Logo highlighting */
+            .logo-image {
+                background: white;
+                padding: 8px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+                border: 2px solid #20b2aa;
+            }
+
+            .btn-primary {
+                background-color: #20b2aa;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                text-decoration: none;
+                display: inline-block;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            .btn-primary:hover {
+                background-color: #008b8b;
+            }
+
+            .btn-success {
+                background-color: #20b2aa;
+                color: white;
+            }
+
+            .btn-warning {
+                background-color: #008b8b;
+                color: white;
+            }
+
+            /* Public navbar (consistent across pages) */
+            .public-header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+                background: rgba(10, 26, 46, 0.95);
+                backdrop-filter: blur(10px);
+                padding: 15px 0;
+            }
+
+            .public-header-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                display: flex;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                align-items: center;
+                gap: 16px;
+                padding: 0 20px;
+            }
+
+            .public-logo {
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                flex: 0 1 auto;
+                min-width: 0;
+            }
+
+            .public-logo-image {
+                height: 40px;
+                max-height: 40px;
+                width: auto;
+                max-width: min(220px, 52vw);
+                object-fit: contain;
+                object-position: left center;
+                background: white;
+                padding: 6px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+                border: 2px solid #20b2aa;
+                display: block;
+                box-sizing: content-box;
+            }
+
+            .public-header-actions {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                flex-shrink: 0;
+            }
+
+            .public-nav-btn {
+                background: white;
+                color: #0a1a2e;
+                padding: 10px 20px;
+                border-radius: 25px;
+                text-decoration: none;
+                font-weight: 600;
+                border: 2px solid #20b2aa;
+                transition: all 0.3s ease;
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .public-nav-btn:visited {
+                color: #0a1a2e;
+            }
+
+            .public-nav-btn:hover {
+                background: #20b2aa;
+                color: white;
+            }
+
+            /* Mobile: wrap nav, readable tap targets, safe areas */
+            @media (max-width: 720px) {
+                .public-header-container {
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    row-gap: 12px;
+                    padding-left: max(16px, env(safe-area-inset-left));
+                    padding-right: max(16px, env(safe-area-inset-right));
+                }
+
+                .public-logo {
+                    flex: 1 1 100%;
+                    justify-content: center;
+                }
+
+                .public-header-actions {
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: 8px;
+                    max-width: 100%;
+                }
+
+                .public-nav-btn {
+                    padding: 10px 14px;
+                    font-size: 14px;
+                }
+            }
+
+            @media (max-width: 400px) {
+                .public-nav-btn {
+                    padding: 8px 12px;
+                    font-size: 13px;
+                }
+            }
+        </style>
         {% endblock %}
 
         {% block javascripts %}
@@ -12,6 +191,21 @@
         {% endblock %}
     </head>
     <body>
+        {% block public_header %}
+            <header class="public-header">
+                <div class="public-header-container">
+                    <a href="{{ path('app_home') }}" class="public-logo">
+                        <img src="{{ asset('img/logo1.png') }}" alt="Rainier's Real Estate" class="public-logo-image" />
+                    </a>
+                    <div class="public-header-actions">
+                        <a href="{{ path('app_home') }}" class="public-nav-btn">Home</a>
+                        <a href="{{ path('app_about_index') }}" class="public-nav-btn">About us</a>
+                        <a href="{{ path('app_contact_index') }}" class="public-nav-btn">Contact</a>
+                        <a href="{{ path('app_login') }}" class="public-nav-btn">Login</a>
+                    </div>
+                </div>
+            </header>
+        {% endblock %}
         {% block body %}{% endblock %}
     </body>
 </html>

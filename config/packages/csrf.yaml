@@ -4,8 +4,9 @@ framework:
         csrf_protection:
             token_id: submit
 
-    csrf_protection:
-        stateless_token_ids:
-            - submit
-            - authenticate
-            - logout
+    # csrf_protection:
+    #     stateless_token_ids:
+    #         - submit
+    #         - authenticate
+    #         - logout
+    #     check_header: true

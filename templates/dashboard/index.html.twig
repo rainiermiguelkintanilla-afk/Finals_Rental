@@ -1,0 +1,180 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Dashboard - Property Management{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/dashboard-index.css') }}">
+{% endblock %}
+
+{% block header_title %}DASHBOARD{% endblock %}
+
+{% block dashboard_content %}
+<!-- Loading Animation -->
+<div id="loading-overlay">
+    <div style="text-align: center;">
+        <div class="loading-spinner"></div>
+        <div>Loading Dashboard...</div>
+    </div>
+</div>
+
+<script>
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        document.getElementById('loading-overlay').style.opacity = '0';
+        setTimeout(function() {
+            document.getElementById('loading-overlay').style.display = 'none';
+        }, 500);
+    }, 1000);
+});
+</script>
+
+            <!-- Top Section -->
+            <div class="content-grid">
+                <!-- Project Card -->
+                <div class="project-card">
+                    <div class="project-image" style="width: 100%; height: 200px; overflow: hidden; border-radius: 8px; margin-bottom: 15px;">
+                        <img src="{{ asset('img/apt2.jpg') }}" alt="{{ featuredProject.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <h2 class="project-title">Project-{{ featuredProject.name }}</h2>
+                    <p class="project-address">{{ featuredProject.address }}</p>
+                    <div class="project-stats">
+                        <div class="project-stat">
+                            <div class="nav-icon">👥</div>
+                            {{ featuredProject.teamSize }}+ People are working
+                        </div>
+                        <div class="project-stat">
+                            <div class="nav-icon">🏠</div>
+                            {{ featuredProject.totalProperties }} Properties
+                        </div>
+                        <div class="project-stat">
+                            <div class="nav-icon">📐</div>
+                            {{ featuredProject.totalSqft }}+ SF
+                        </div>
+                    </div>
+                    <div class="project-price">{{ featuredProject.price|peso }}</div>
+                </div>
+
+                <!-- Property Overview Chart -->
+                <div class="chart-card">
+                    <h3 class="chart-title">Property Overview</h3>
+                    <div class="chart-period">Current Statistics</div>
+                    <div class="property-overview" style="padding: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                                <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Total Apartments</div>
+                                <div style="font-size: 24px; font-weight: bold; color: #333;">{{ totalApartments }}</div>
+                            </div>
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                                <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Occupied</div>
+                                <div style="font-size: 24px; font-weight: bold; color: #28a745;">{{ occupiedApartments }}</div>
+                            </div>
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                                <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Available</div>
+                                <div style="font-size: 24px; font-weight: bold; color: #17a2b8;">{{ availableApartments }}</div>
+                            </div>
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                                <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Total Tenants</div>
+                                <div style="font-size: 24px; font-weight: bold; color: #333;">{{ totalTenants }}</div>
+                            </div>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                            <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Total Leases</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #333;">{{ totalLeases }}</div>
+                        </div>
+                        <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #4caf50;">
+                            <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Monthly Revenue</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #2e7d32;">{{ totalRevenue|peso }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon pink">🏠</div>
+                    <div class="kpi-content">
+                        <div class="kpi-title">Total Project</div>
+                        <div class="kpi-value">{{ totalProjects|number_format }},{{ (totalProjects * 100)|number_format }} Collected</div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon blue">👁️</div>
+                    <div class="kpi-content">
+                        <div class="kpi-title">Total View</div>
+                        <div class="kpi-value">{{ (totalProjects * 1000)|number_format }} Viewer</div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon orange">🏷️</div>
+                    <div class="kpi-content">
+                        <div class="kpi-title">Total Sales</div>
+                        <div class="kpi-value">{{ totalPayments|number_format }} Project</div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon purple">💰</div>
+                    <div class="kpi-content">
+                        <div class="kpi-title">Total Earning</div>
+                        <div class="kpi-value">{{ totalRevenue|peso }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="bottom-grid">
+                <!-- Sales Report -->
+                <div class="sales-report">
+                    <h3 class="sales-title">Sales Report</h3>
+                    <table class="sales-table">
+                        <thead>
+                            <tr>
+                                <th>Sales by</th>
+                                <th>Email</th>
+                                <th>Sales Type</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sale in recentSales %}
+                            <tr>
+                                <td>{{ sale.salesBy }}</td>
+                                <td>{{ sale.email }}</td>
+                                <td>{{ sale.salesType|title }}</td>
+                                <td>{{ sale.price|peso(0) }}</td>
+                                <td>
+                                    <span class="status-badge status-{{ sale.status }}">
+                                        {{ sale.status|title }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: #6b7280; padding: 20px;">
+                                    No sales data available
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Total Sell Chart -->
+                <div class="total-sell-chart">
+                    <h3 class="chart-title">Total sell</h3>
+                    <div class="chart-bars">
+                        {% for month, value in monthlySales %}
+                        <div class="chart-bar {% if month == 'May' %}highlight{% endif %}" 
+                             style="height: {{ (value / 4000 * 100)|round }}%"></div>
+                        {% endfor %}
+                    </div>
+                    <div class="chart-labels">
+                        {% for month in monthlySales|keys %}
+                        <div class="chart-label">{{ month }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+{% endblock %}

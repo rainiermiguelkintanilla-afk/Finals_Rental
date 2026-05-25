@@ -1,0 +1,435 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}New Lease - Rental Management{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/rentals.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/dashboard-colors.css') }}">
+    <style>
+        .lease-form-container {
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #f5f5f5;
+            min-height: calc(100vh - 200px);
+        }
+
+        .page-header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-title::before {
+            content: '📋';
+            font-size: 32px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            padding: 35px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        .form-control,
+        select.form-control,
+        textarea.form-control,
+        input[type="text"].form-control,
+        input[type="date"].form-control,
+        input[type="number"].form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #ffffff;
+            color: #1f2937;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus,
+        select.form-control:focus,
+        textarea.form-control:focus,
+        input[type="text"].form-control:focus,
+        input[type="date"].form-control:focus,
+        input[type="number"].form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: #ffffff;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
+            cursor: pointer;
+        }
+
+        input[type="date"].form-control {
+            position: relative;
+            cursor: pointer;
+        }
+
+        input[type="date"].form-control::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            opacity: 0.6;
+            margin-left: 8px;
+        }
+
+        input[type="date"].form-control::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+            line-height: 1.5;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #6a3d91 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-errors {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .form-errors ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .field-error {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 6px;
+            display: block;
+        }
+
+        /* Money input styling */
+        .form-group input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        .form-group input[type="number"]::-webkit-outer-spin-button,
+        .form-group input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Select dropdown arrow styling */
+        select.form-control option {
+            padding: 10px;
+            background: white;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .lease-form-container {
+                padding: 15px;
+            }
+
+            .form-card {
+                padding: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+            }
+
+            .form-actions .btn {
+                width: 100%;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+        }
+
+        /* Animation for form appearance */
+        .form-card {
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Placeholder styling */
+        .form-control::placeholder {
+            color: #9ca3af;
+            opacity: 1;
+        }
+
+        /* Disabled state */
+        .form-control:disabled {
+            background: #f3f4f6;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* Invalid input styling */
+        .form-control:invalid {
+            border-color: #ef4444;
+        }
+
+        .form-control:invalid:focus {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Find the monthly rent input field by name attribute
+            const monthlyRentInput = document.querySelector('input[name*="[monthlyRent]"]');
+            
+            if (monthlyRentInput) {
+                // Prevent negative values on input
+                monthlyRentInput.addEventListener('input', function(e) {
+                    const value = parseFloat(e.target.value);
+                    if (!isNaN(value) && value < 0) {
+                        e.target.setCustomValidity('Monthly rent cannot be negative. Please enter a positive value.');
+                    } else {
+                        e.target.setCustomValidity('');
+                    }
+                });
+
+                // Prevent negative values on keypress (for minus sign)
+                monthlyRentInput.addEventListener('keydown', function(e) {
+                    // Allow backspace, delete, tab, escape, enter, decimal point, and numbers
+                    if ([46, 8, 9, 27, 13, 110, 190].indexOf(e.keyCode) !== -1 ||
+                        // Allow Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                        (e.keyCode === 65 && e.ctrlKey === true) ||
+                        (e.keyCode === 67 && e.ctrlKey === true) ||
+                        (e.keyCode === 86 && e.ctrlKey === true) ||
+                        (e.keyCode === 88 && e.ctrlKey === true) ||
+                        // Allow numbers
+                        (e.keyCode >= 35 && e.keyCode <= 40) ||
+                        (e.keyCode >= 48 && e.keyCode <= 57 && !e.shiftKey) ||
+                        (e.keyCode >= 96 && e.keyCode <= 105)) {
+                        return;
+                    }
+                    // Block minus sign
+                    if (e.keyCode === 189 || e.keyCode === 109) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+
+                // Validate on blur
+                monthlyRentInput.addEventListener('blur', function(e) {
+                    const value = parseFloat(e.target.value);
+                    if (!isNaN(value) && value < 0) {
+                        e.target.setCustomValidity('Monthly rent must be a positive number.');
+                    } else {
+                        e.target.setCustomValidity('');
+                    }
+                });
+
+                // Also prevent paste of negative values
+                monthlyRentInput.addEventListener('paste', function(e) {
+                    const paste = (e.clipboardData || window.clipboardData).getData('text');
+                    const value = parseFloat(paste);
+                    if (!isNaN(value) && value < 0) {
+                        e.preventDefault();
+                        e.target.setCustomValidity('Monthly rent cannot be negative. Please enter a positive value.');
+                        return false;
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block header_title %}New Lease{% endblock %}
+
+{% block dashboard_content %}
+<div class="lease-form-container">
+    <div class="page-header">
+        <h1 class="page-title">Create Lease</h1>
+    </div>
+    
+    <div class="form-card">
+        {{ form_start(form) }}
+            {% if not form.vars.valid %}
+                <div class="form-errors">
+                    {{ form_errors(form) }}
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                {{ form_label(form.tenant, 'Tenant', {'label_attr': {'class': ''}}) }}
+                {{ form_widget(form.tenant, {'attr': {'class': 'form-control'}}) }}
+                {% if form.tenant.vars.errors|length > 0 %}
+                    <span class="field-error">{{ form_errors(form.tenant) }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.apartment, 'Apartment', {'label_attr': {'class': ''}}) }}
+                {{ form_widget(form.apartment, {'attr': {'class': 'form-control'}}) }}
+                {% if form.apartment.vars.errors|length > 0 %}
+                    <span class="field-error">{{ form_errors(form.apartment) }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.startDate, 'Start Date', {'label_attr': {'class': ''}}) }}
+                    {{ form_widget(form.startDate, {'attr': {'class': 'form-control', 'placeholder': 'mm/dd/yyyy'}}) }}
+                    {% if form.startDate.vars.errors|length > 0 %}
+                        <span class="field-error">{{ form_errors(form.startDate) }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.endDate, 'End Date', {'label_attr': {'class': ''}}) }}
+                    {{ form_widget(form.endDate, {'attr': {'class': 'form-control', 'placeholder': 'mm/dd/yyyy'}}) }}
+                    {% if form.endDate.vars.errors|length > 0 %}
+                        <span class="field-error">{{ form_errors(form.endDate) }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.monthlyRent, 'Monthly Rent $', {'label_attr': {'class': ''}}) }}
+                {{ form_widget(form.monthlyRent, {'attr': {'class': 'form-control', 'placeholder': '0.00', 'min': '0', 'step': '0.01'}}) }}
+                {% if form.monthlyRent.vars.errors|length > 0 %}
+                    <span class="field-error">{{ form_errors(form.monthlyRent) }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.status, 'Status', {'label_attr': {'class': ''}}) }}
+                {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
+                {% if form.status.vars.errors|length > 0 %}
+                    <span class="field-error">{{ form_errors(form.status) }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.notes, 'Notes', {'label_attr': {'class': ''}}) }}
+                {{ form_widget(form.notes, {'attr': {'class': 'form-control', 'placeholder': 'Enter lease notes'}}) }}
+                {% if form.notes.vars.errors|length > 0 %}
+                    <span class="field-error">{{ form_errors(form.notes) }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ path('app_lease_index') }}" class="btn btn-secondary">Cancel</a>
+                {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+

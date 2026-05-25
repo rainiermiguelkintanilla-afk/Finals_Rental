@@ -1,0 +1,78 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Payments - Rental Management{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/rentals.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/dashboard-payment.css') }}">
+{% endblock %}
+
+{% block header_title %}Payments{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">Payments</h1>
+        <a href="{{ path('app_payment_new') }}" class="btn btn-primary">+ Add New Payment</a>
+    </div>
+
+    {% if payments is empty %}
+        <div class="empty-state">
+            <h3>No payments found</h3>
+            <p>Start by recording your first payment.</p>
+            <a href="{{ path('app_payment_new') }}" class="btn btn-primary">Add First Payment</a>
+        </div>
+    {% else %}
+        <div class="payments-grid">
+            {% for payment in payments %}
+                <div class="payment-card">
+                    <div class="payment-amount">{{ payment.amount|peso }}</div>
+                    
+                    <div class="tenant-info">
+                        <div class="tenant-name">{{ payment.tenant.fullName }}</div>
+                        <div class="apartment-name">{{ payment.apartment.name }}</div>
+                    </div>
+                    
+                    <div class="payment-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Payment Date</div>
+                            <div class="detail-value">{{ payment.paymentDate|date('M d, Y') }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Due Date</div>
+                            <div class="detail-value">{{ payment.dueDate|date('M d, Y') }}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <span class="status-badge status-{{ payment.status }}">{{ payment.status|title }}</span>
+                    </div>
+                    
+                    {% if payment.paymentMethod %}
+                        <div class="payment-method">
+                            Method: {{ payment.paymentMethod|title }}
+                        </div>
+                    {% endif %}
+                    
+                    {% if payment.notes %}
+                        <div class="payment-notes">
+                            {{ payment.notes|slice(0, 100) }}{% if payment.notes|length > 100 %}...{% endif %}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="payment-actions">
+                        <a href="{{ path('app_payment_show', {'id': payment.id}) }}" class="btn btn-primary btn-sm">View</a>
+                        <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form method="post" action="{{ path('app_payment_delete', {'id': payment.id}) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this payment?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ payment.id) }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

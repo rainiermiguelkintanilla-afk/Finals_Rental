@@ -1,0 +1,22 @@
+.dashboard-page-content {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.dashboard-page-title {
+    margin-top: 0;
+}
+
+.dashboard-page-text {
+    color: #64748b;
+}
+
+.dashboard-back-link {
+    color: #0ea5e9;
+    text-decoration: none;
+}
+
+.dashboard-back-link:hover {
+    text-decoration: underline;
+}

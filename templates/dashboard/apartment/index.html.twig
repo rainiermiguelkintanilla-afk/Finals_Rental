@@ -1,0 +1,114 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Apartments - Rental Management{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/rentals.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/dashboard-apartment.css') }}">
+    <style>
+        .apartment-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .apartment-image {
+            transition: transform 0.3s ease;
+        }
+        .apartment-card:hover .apartment-image img {
+            transform: scale(1.05);
+        }
+        .apartment-image img {
+            transition: transform 0.3s ease;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+        .btn-primary {
+            padding: 10px 20px;
+            background: #20b2aa;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+            display: inline-block;
+        }
+        .btn-primary:hover {
+            background: #1a9b8f;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+{% block header_title %}Apartments{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">Apartments</h1>
+        <a href="{{ path('app_apartment_new') }}" class="btn btn-primary">+ Add New Apartment</a>
+    </div>
+
+    {% if apartments is empty %}
+        <div class="empty-state">
+            <h3>No apartments found</h3>
+            <p>Start by adding your first apartment.</p>
+            <a href="{{ path('app_apartment_new') }}" class="btn btn-primary">Add First Apartment</a>
+        </div>
+    {% else %}
+        <div class="apartments-grid">
+            {% for apartment in apartments %}
+                <div class="apartment-card">
+                    <div class="apartment-image" style="width: 100%; height: 200px; overflow: hidden; border-radius: 8px 8px 0 0; margin: -15px -15px 15px -15px;">
+                        <img src="{{ apartment_image_src(apartment) }}" alt="{{ apartment.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="apartment-name">{{ apartment.name }}</div>
+                    <div class="apartment-address">{{ apartment.address }}</div>
+                    
+                    <div class="apartment-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Bedrooms</div>
+                            <div class="detail-value">{{ apartment.bedrooms }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Bathrooms</div>
+                            <div class="detail-value">{{ apartment.bathrooms }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="apartment-rent">{{ apartment.rentAmount|peso }}/month</div>
+                    
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <span class="status-badge status-{{ apartment.status }}">{{ apartment.status|title }}</span>
+                    </div>
+                    
+                    {% if apartment.description %}
+                        <div class="apartment-description">
+                            {{ apartment.description|slice(0, 100) }}{% if apartment.description|length > 100 %}...{% endif %}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="apartment-actions">
+                        <a href="{{ path('app_apartment_show', {'id': apartment.id}) }}" class="btn btn-primary btn-sm">View</a>
+                        <a href="{{ path('app_apartment_edit', {'id': apartment.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form method="post" action="{{ path('app_apartment_delete', {'id': apartment.id}) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this apartment?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ apartment.id) }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

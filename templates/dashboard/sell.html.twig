@@ -1,0 +1,20 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Sell - Dashboard{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/dashboard-page.css') }}">
+{% endblock %}
+
+{% block header_title %}Sell{% endblock %}
+
+{% block dashboard_content %}
+<div class="dashboard-page-content">
+    <h2 class="dashboard-page-title">Sell</h2>
+    <p class="dashboard-page-text">Sales tools placeholder. Reusing dashboard layout.</p>
+    <a href="{{ path('app_dashboard_index') }}" class="dashboard-back-link">Back to Dashboard</a>
+</div>
+{% endblock %}
+
+

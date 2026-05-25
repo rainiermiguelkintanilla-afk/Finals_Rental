@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <meta name="theme-color" content="#0f172a">
+        <title>{% block title %}Property Management Dashboard{% endblock %}</title>
+        <link rel="icon" type="image/png" href="{{ asset('img/secondarylogo.png') }}">
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('styles/dashboard-colors.css') }}">
+            <style>
+                @font-face {
+                    font-family: 'SITKAVF';
+                    src: url('{{ asset('fonts/SITKAVF-Small.TTF') }}') format('truetype');
+                    font-weight: normal;
+                    font-style: normal;
+                }
+
+                @font-face {
+                    font-family: 'SITKAVF';
+                    src: url('{{ asset('fonts/SITKAVF-SmallBold.TTF') }}') format('truetype');
+                    font-weight: bold;
+                    font-style: normal;
+                }
+            </style>
+            <link rel="stylesheet" href="{{ asset('styles/dashboard-layout.css') }}">
+        {% endblock %}
+    </head>
+    <body>
+        <div class="dashboard-layout">
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <a href="{{ path('app_home') }}" class="logo-link">
+                        <img src="{{ asset('img/logo1.png') }}" alt="Rainier's Real Estate" class="logo-image">
+                    </a>
+                </div>
+                {% set current = app.request.attributes.get('_route') %}
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="{{ path('app_dashboard_index') }}" class="nav-link {{ current starts with 'app_dashboard_' or current == 'app_dashboard_index' ? 'active' }}">DASHBOARD</a>
+                    </li>
+                    {% if is_granted('ROLE_STAFF') %}
+                    <li class="nav-item">
+                        <a href="{{ path('app_apartment_index') }}" class="nav-link {{ current starts with 'app_apartment_' ? 'active' }}">Property</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('app_tenant_index') }}" class="nav-link {{ current starts with 'app_tenant_' ? 'active' }}">Tenants</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('app_lease_index') }}" class="nav-link {{ current starts with 'app_lease_' ? 'active' }}">Leases</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('app_payment_index') }}" class="nav-link {{ current starts with 'app_payment_' ? 'active' }}">Payments</a>
+                    </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a href="{{ path('app_user_index') }}" class="nav-link {{ current starts with 'app_user_' ? 'active' }}">Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('app_activity_log_index') }}" class="nav-link {{ current starts with 'app_activity_log_' ? 'active' }}">Activity Logs</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a href="{{ path('app_dashboard_profile') }}" class="nav-link {{ current == 'app_dashboard_profile' ? 'active' }}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('app_dashboard_settings') }}" class="nav-link {{ current == 'app_dashboard_settings' ? 'active' }}">Settings</a>
+                    </li>
+                </ul>
+
+                <div class="sidebar-profile">
+                    <a href="{{ path('app_dashboard_profile') }}" class="sidebar-profile-link">
+                        <div class="sidebar-profile-avatar">
+                            {{ app.user.getDisplayName()|slice(0, 2)|upper }}
+                        </div>
+                        <div class="sidebar-profile-info">
+                            <div class="sidebar-profile-name">{{ app.user.getDisplayName() }}</div>
+                            <div class="sidebar-profile-role">
+                                {% if app.user.isAdmin() %}
+                                    Administrator
+                                {% elseif app.user.isStaff() %}
+                                    Staff Member
+                                {% else %}
+                                    User
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <form method="post" action="{{ path('app_logout') }}" style="margin: 0;">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                    <button type="submit" class="logout-btn">Log out</button>
+                </form>
+            </div>
+
+            <div class="main-content">
+                <div class="header">
+                    <h1 class="header-title">{% block header_title %}{% endblock %}</h1>
+                    <div class="header-actions">
+                        <form method="GET" action="{{ path('app_dashboard_search') }}" class="search-bar" style="display: flex; align-items: center; width: 100%;">
+                            <input type="text" name="q" class="search-input" placeholder="Search apartments, leases..." value="{{ app.request.query.get('q') }}" style="border: none; outline: none; padding: 8px 12px; width: 100%;">
+                        </form>
+                            <div class="profile-section" id="profileDropdown">
+                            <div class="profile-img">{{ app.user.email|slice(0, 2)|upper }}</div>
+                            <span class="profile-name">{{ app.user.email }}</span>
+                            <span class="profile-role" style="color: white;">({{ app.user.isAdmin() ? 'Admin' : (app.user.isStaff() ? 'Staff' : 'User') }})</span>
+                            <div class="profile-dropdown">▼</div>
+                            <div class="profile-dropdown-menu" id="profileDropdownMenu">
+                                <a href="{{ path('app_dashboard_profile') }}" class="dropdown-item">Profile</a>
+                                <a href="{{ path('app_dashboard_settings') }}" class="dropdown-item">Settings</a>
+                                <form method="post" action="{{ path('app_logout') }}" style="margin: 0;">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                                    <button type="submit" class="dropdown-item logout-dropdown-btn">Log out</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content">
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label == 'error' ? 'danger' : label }}" style="padding: 15px; margin-bottom: 20px; border-radius: 8px; 
+                                background: {{ label == 'success' ? '#d4edda' : (label == 'error' ? '#f8d7da' : '#d1ecf1') }}; 
+                                border: 1px solid {{ label == 'success' ? '#c3e6cb' : (label == 'error' ? '#f5c6cb' : '#bee5eb') }};
+                                color: {{ label == 'success' ? '#155724' : (label == 'error' ? '#721c24' : '#0c5460') }};">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                    {% block dashboard_content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+        {% block javascripts %}
+        <script>
+            // Profile dropdown toggle
+            document.addEventListener('DOMContentLoaded', function() {
+                const profileSection = document.getElementById('profileDropdown');
+                const dropdownMenu = document.getElementById('profileDropdownMenu');
+                
+                if (profileSection && dropdownMenu) {
+                    profileSection.addEventListener('click', function(e) {
+                        // Don't close if clicking inside the dropdown menu
+                        if (e.target.closest('.profile-dropdown-menu')) {
+                            return;
+                        }
+                        profileSection.classList.toggle('active');
+                    });
+                    
+                    // Close dropdown when clicking outside
+                    document.addEventListener('click', function(e) {
+                        if (!profileSection.contains(e.target)) {
+                            profileSection.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        </script>
+        <script src="{{ asset('js/dashboard-realtime.js') }}"></script>
+        {% endblock %}
+    </body>
+</html>

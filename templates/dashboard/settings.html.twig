@@ -1,0 +1,400 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Settings - Dashboard{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/dashboard-page.css') }}">
+    <style>
+        .settings-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .settings-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .settings-section {
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+        }
+
+        .settings-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .settings-item-info {
+            flex: 1;
+        }
+
+        .settings-item-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .settings-item-description {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 28px;
+            background-color: #ccc;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-switch.active {
+            background-color: #667eea;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: left 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            left: 24px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .settings-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .alert-info {
+            background: #e0f2fe;
+            border: 1px solid #0284c7;
+            color: #0c4a6e;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-group input[type="password"],
+        .form-group input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .settings-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block header_title %}Settings{% endblock %}
+
+{% block dashboard_content %}
+<div class="dashboard-page-content">
+    <div class="settings-container">
+        <!-- Account Settings -->
+        <div class="settings-card">
+            <div class="settings-section">
+                <div class="settings-title">⚙️ Account Settings</div>
+                
+                <div class="settings-item">
+                    <div class="settings-item-info">
+                        <div class="settings-item-label">Email</div>
+                        <div class="settings-item-description">{{ user.getEmail() }}</div>
+                    </div>
+                </div>
+
+                <div class="settings-item">
+                    <div class="settings-item-info">
+                        <div class="settings-item-label">User Role</div>
+                        <div class="settings-item-description">
+                            {% if user.isAdmin() %}
+                                Administrator
+                            {% elseif user.isStaff() %}
+                                Staff Member
+                            {% else %}
+                                User
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="settings-section">
+                <div class="settings-title">🔔 Notification Settings</div>
+                
+                <div class="settings-item">
+                    <div class="settings-item-info">
+                        <div class="settings-item-label">Email Notifications</div>
+                        <div class="settings-item-description">Receive updates via email</div>
+                    </div>
+                    <div class="toggle-switch active" id="emailToggle" onclick="toggleSwitch(this)"></div>
+                </div>
+
+                <div class="settings-item">
+                    <div class="settings-item-info">
+                        <div class="settings-item-label">Payment Reminders</div>
+                        <div class="settings-item-description">Get notified about upcoming payments</div>
+                    </div>
+                    <div class="toggle-switch active" id="paymentToggle" onclick="toggleSwitch(this)"></div>
+                </div>
+
+                <div class="settings-item">
+                    <div class="settings-item-info">
+                        <div class="settings-item-label">Maintenance Alerts</div>
+                        <div class="settings-item-description">Be notified of property maintenance</div>
+                    </div>
+                    <div class="toggle-switch" id="maintenanceToggle" onclick="toggleSwitch(this)"></div>
+                </div>
+            </div>
+
+            <!-- Security Settings -->
+            <div class="settings-section">
+                <div class="settings-title">🔐 Security Settings</div>
+                
+                <div id="passwordChangeForm" style="display: none; margin-bottom: 20px;">
+                    {{ form_start(passwordForm, {'attr': {'class': 'password-change-form'}}) }}
+                    
+                    <div class="form-group">
+                        {{ form_label(passwordForm.currentPassword, 'Current Password', {'label_attr': {'class': 'settings-item-label'}}) }}
+                        {{ form_widget(passwordForm.currentPassword, {'attr': {'class': 'form-control'}}) }}
+                        {% if passwordForm.currentPassword.vars.errors|length > 0 %}
+                            <div style="color: #dc2626; font-size: 12px; margin-top: 5px;">
+                                {{ form_errors(passwordForm.currentPassword) }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(passwordForm.newPassword.first, 'New Password', {'label_attr': {'class': 'settings-item-label'}}) }}
+                        {{ form_widget(passwordForm.newPassword.first, {'attr': {'class': 'form-control'}}) }}
+                        {% if passwordForm.newPassword.first.vars.errors|length > 0 %}
+                            <div style="color: #dc2626; font-size: 12px; margin-top: 5px;">
+                                {{ form_errors(passwordForm.newPassword.first) }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(passwordForm.newPassword.second, 'Confirm New Password', {'label_attr': {'class': 'settings-item-label'}}) }}
+                        {{ form_widget(passwordForm.newPassword.second, {'attr': {'class': 'form-control'}}) }}
+                        {% if passwordForm.newPassword.second.vars.errors|length > 0 %}
+                            <div style="color: #dc2626; font-size: 12px; margin-top: 5px;">
+                                {{ form_errors(passwordForm.newPassword.second) }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {% if passwordForm.newPassword.vars.errors|length > 0 %}
+                        <div style="color: #dc2626; font-size: 12px; margin-bottom: 15px;">
+                            {{ form_errors(passwordForm.newPassword) }}
+                        </div>
+                    {% endif %}
+
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button type="submit" class="btn btn-primary">Change Password</button>
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('passwordChangeForm').style.display = 'none'">Cancel</button>
+                    </div>
+                    {{ form_end(passwordForm) }}
+                </div>
+
+                <div class="settings-item">
+                    <div class="settings-item-info">
+                        <div class="settings-item-label">Change Password</div>
+                        <div class="settings-item-description">Update your account password</div>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('passwordChangeForm').style.display = 'block'">Change Password</button>
+                </div>
+
+                <div class="settings-item">
+                    <div class="settings-item-info">
+                        <div class="settings-item-label">Two-Factor Authentication</div>
+                        <div class="settings-item-description">Add an extra layer of security</div>
+                    </div>
+                    <div class="toggle-switch" id="2faToggle" onclick="toggleSwitch(this)"></div>
+                </div>
+            </div>
+
+            <!-- Privacy Settings -->
+            <div class="settings-section">
+                <div class="settings-title">👁️ Privacy Settings</div>
+                
+                <div class="settings-item">
+                    <div class="settings-item-info">
+                        <div class="settings-item-label">Profile Visibility</div>
+                        <div class="settings-item-description">Control who can see your profile</div>
+                    </div>
+                    <div class="toggle-switch active" id="profileToggle" onclick="toggleSwitch(this)"></div>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ path('app_dashboard_settings') }}" id="settingsForm">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('submit') }}">
+                <input type="hidden" name="save_settings" value="1">
+                <div class="settings-actions">
+                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                    <a href="{{ path('app_dashboard_profile') }}" class="btn btn-secondary">Back to Profile</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="settings-card" style="border-top: 3px solid #ef4444;">
+            <div class="settings-section">
+                <div class="settings-title" style="color: #ef4444;">⚠️ Danger Zone</div>
+                
+                <div class="alert alert-info">
+                    These actions cannot be undone. Please proceed with caution.
+                </div>
+
+                <div class="settings-item">
+                    <div class="settings-item-info">
+                        <div class="settings-item-label">Log Out All Sessions</div>
+                        <div class="settings-item-description">Sign out from all devices</div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="logoutAll()">Log Out All</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleSwitch(element) {
+        element.classList.toggle('active');
+    }
+
+    function logoutAll() {
+        if (confirm('Are you sure you want to log out from all sessions? You will be signed out immediately.')) {
+            window.location.href = '{{ path("app_logout") }}';
+        }
+    }
+
+    // Store toggle states in hidden inputs when form is submitted
+    document.getElementById('settingsForm').addEventListener('submit', function(e) {
+        const emailNotifications = document.createElement('input');
+        emailNotifications.type = 'hidden';
+        emailNotifications.name = 'emailNotifications';
+        emailNotifications.value = document.getElementById('emailToggle').classList.contains('active') ? '1' : '0';
+        this.appendChild(emailNotifications);
+
+        const paymentReminders = document.createElement('input');
+        paymentReminders.type = 'hidden';
+        paymentReminders.name = 'paymentReminders';
+        paymentReminders.value = document.getElementById('paymentToggle').classList.contains('active') ? '1' : '0';
+        this.appendChild(paymentReminders);
+
+        const maintenanceAlerts = document.createElement('input');
+        maintenanceAlerts.type = 'hidden';
+        maintenanceAlerts.name = 'maintenanceAlerts';
+        maintenanceAlerts.value = document.getElementById('maintenanceToggle').classList.contains('active') ? '1' : '0';
+        this.appendChild(maintenanceAlerts);
+
+        const twoFactorAuth = document.createElement('input');
+        twoFactorAuth.type = 'hidden';
+        twoFactorAuth.name = 'twoFactorAuth';
+        twoFactorAuth.value = document.getElementById('2faToggle').classList.contains('active') ? '1' : '0';
+        this.appendChild(twoFactorAuth);
+
+        const profileVisibility = document.createElement('input');
+        profileVisibility.type = 'hidden';
+        profileVisibility.name = 'profileVisibility';
+        profileVisibility.value = document.getElementById('profileToggle').classList.contains('active') ? '1' : '0';
+        this.appendChild(profileVisibility);
+    });
+</script>
+{% endblock %}
+
+

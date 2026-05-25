@@ -1,0 +1,6 @@
+Email is required: Email is required
+Please enter a valid email address: Please enter a valid email address
+Full name cannot be longer than 255 characters: Full name cannot be longer than 255 characters
+The password fields must match.: The password fields must match.
+Please enter a password: Please enter a password
+'Your password should be at least {{ limit }} characters': 'Your password should be at least {{ limit }} characters'

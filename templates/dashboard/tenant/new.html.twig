@@ -1,0 +1,286 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Add New Tenant - Tenant Management{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/rentals.css') }}">
+    <style>
+        .new-tenant-container {
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .form-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .form-errors {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .form-errors ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .field-error {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .form-actions .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block header_title %}Add New Tenant{% endblock %}
+
+{% block dashboard_content %}
+<div class="new-tenant-container">
+    <div class="page-header">
+        <h1 class="page-title">➕ Add New Tenant</h1>
+    </div>
+
+    <div class="form-container">
+        {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+            
+            <div class="form-section">
+                <h3 class="section-title">Personal Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.firstName, 'First Name') }}
+                        {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
+                        {% if form.firstName.vars.errors|length > 0 %}
+                            <div class="field-error">
+                                {% for error in form.firstName.vars.errors %}
+                                    {{ error.message }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(form.lastName, 'Last Name') }}
+                        {{ form_widget(form.lastName, {'attr': {'class': 'form-control'}}) }}
+                        {% if form.lastName.vars.errors|length > 0 %}
+                            <div class="field-error">
+                                {% for error in form.lastName.vars.errors %}
+                                    {{ error.message }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.email, 'Email Address') }}
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'type': 'email'}}) }}
+                    {% if form.email.vars.errors|length > 0 %}
+                        <div class="field-error">
+                            {% for error in form.email.vars.errors %}
+                                {{ error.message }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.phone, 'Phone Number') }}
+                    {{ form_widget(form.phone, {'attr': {'class': 'form-control'}}) }}
+                    {% if form.phone.vars.errors|length > 0 %}
+                        <div class="field-error">
+                            {% for error in form.phone.vars.errors %}
+                                {{ error.message }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.dateOfBirth, 'Date of Birth') }}
+                    {{ form_widget(form.dateOfBirth, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.emergencyContact, 'Emergency Contact') }}
+                    {{ form_widget(form.emergencyContact, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.address, 'Address') }}
+                    {{ form_widget(form.address, {'attr': {'class': 'form-control', 'rows': '3'}}) }}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">Lease Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.moveInDate, 'Move-in Date') }}
+                        {{ form_widget(form.moveInDate, {'attr': {'class': 'form-control'}}) }}
+                        {% if form.moveInDate.vars.errors|length > 0 %}
+                            <div class="field-error">
+                                {% for error in form.moveInDate.vars.errors %}
+                                    {{ error.message }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(form.moveOutDate, 'Move-out Date (Optional)') }}
+                        {{ form_widget(form.moveOutDate, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.status, 'Status') }}
+                    {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
+                    {% if form.status.vars.errors|length > 0 %}
+                        <div class="field-error">
+                            {% for error in form.status.vars.errors %}
+                                {{ error.message }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ path('app_tenant_index') }}" class="btn btn-secondary">Cancel</a>
+                {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

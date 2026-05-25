@@ -1,0 +1,490 @@
+/* Deep Navy Blue and Teal Color Scheme for Dashboard */
+
+/* Sidebar Colors */
+.sidebar {
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%) !important;
+    border-right: 2px solid #0ea5e9;
+}
+
+.sidebar-header {
+    border-bottom: 1px solid rgba(14, 165, 233, 0.2) !important;
+}
+
+.logo-icon {
+    background: linear-gradient(135deg, #0ea5e9, #06b6d4) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.logo-text {
+    color: #f1f5f9 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.logo-subtitle {
+    color: #94a3b8 !important;
+}
+
+.nav-link {
+    color: #cbd5e1 !important;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(6, 182, 212, 0.2)) !important;
+    color: #f1f5f9 !important;
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.2);
+    transform: translateX(4px);
+}
+
+.logout-btn {
+    border: 1px solid rgba(14, 165, 233, 0.3) !important;
+    color: #cbd5e1 !important;
+    background: rgba(14, 165, 233, 0.05) !important;
+}
+
+.logout-btn:hover {
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(6, 182, 212, 0.1)) !important;
+    border-color: #0ea5e9 !important;
+    color: #f1f5f9 !important;
+}
+
+/* Header Colors */
+.header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+    border-bottom: 2px solid #0ea5e9;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.1);
+}
+
+.header-title {
+    color: #f1f5f9 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.search-input {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border: 2px solid #0ea5e9 !important;
+    color: #f1f5f9 !important;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
+}
+
+.search-input::placeholder {
+    color: #94a3b8 !important;
+}
+
+.search-input:focus {
+    border-color: #06b6d4 !important;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2) !important;
+}
+
+.notification-btn {
+    color: #cbd5e1 !important;
+    transition: all 0.3s ease;
+}
+
+.notification-btn:hover {
+    color: #0ea5e9 !important;
+    transform: scale(1.1);
+}
+
+.profile-name {
+    color: #f1f5f9 !important;
+}
+
+.profile-dropdown {
+    color: #94a3b8 !important;
+}
+
+/* Content Area */
+.content {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+}
+
+/* Project Card */
+.project-card {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+    border: 2px solid #0ea5e9;
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.2) !important;
+}
+
+.project-title {
+    color: #f1f5f9 !important;
+}
+
+.project-address {
+    color: #94a3b8 !important;
+}
+
+.project-stat {
+    color: #cbd5e1 !important;
+}
+
+.project-price {
+    color: #0ea5e9 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Chart Card */
+.chart-card {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+    border: 2px solid #0ea5e9;
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.2) !important;
+}
+
+.chart-title {
+    color: #f1f5f9 !important;
+}
+
+.chart-period {
+    color: #94a3b8 !important;
+}
+
+.chart-placeholder {
+    background: linear-gradient(45deg, rgba(14, 165, 233, 0.1) 25%, transparent 25%), 
+                linear-gradient(-45deg, rgba(14, 165, 233, 0.1) 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, rgba(6, 182, 212, 0.1) 75%), 
+                linear-gradient(-45deg, transparent 75%, rgba(6, 182, 212, 0.1) 75%) !important;
+    color: #0ea5e9 !important;
+    border: 2px dashed #0ea5e9;
+}
+
+/* KPI Cards */
+.kpi-card {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+    border: 2px solid #0ea5e9;
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.2) !important;
+    transition: all 0.3s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 12px 32px rgba(14, 165, 233, 0.3) !important;
+    border-color: #06b6d4 !important;
+}
+
+.kpi-icon.pink { 
+    background: linear-gradient(135deg, #0ea5e9, #06b6d4) !important;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+}
+
+.kpi-icon.blue { 
+    background: linear-gradient(135deg, #0ea5e9, #06b6d4) !important;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+}
+
+.kpi-icon.orange { 
+    background: linear-gradient(135deg, #0ea5e9, #06b6d4) !important;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+}
+
+.kpi-icon.purple { 
+    background: linear-gradient(135deg, #0ea5e9, #06b6d4) !important;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+}
+
+.kpi-title {
+    color: #94a3b8 !important;
+}
+
+.kpi-value {
+    color: #f1f5f9 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Sales Report */
+.sales-report {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+    border: 2px solid #0ea5e9;
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.2) !important;
+}
+
+.sales-title {
+    color: #f1f5f9 !important;
+}
+
+.sales-table th {
+    color: #0ea5e9 !important;
+    background: rgba(14, 165, 233, 0.1);
+    font-weight: 600;
+}
+
+.sales-table td {
+    color: #cbd5e1 !important;
+    border-bottom: 1px solid rgba(14, 165, 233, 0.2) !important;
+}
+
+.sales-table tr:hover {
+    background: rgba(14, 165, 233, 0.05);
+}
+
+.status-paid {
+    background: linear-gradient(135deg, #0ea5e9, #06b6d4) !important;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3);
+}
+
+.status-pending {
+    background: linear-gradient(135deg, #1e293b, #334155) !important;
+    color: #0ea5e9 !important;
+    border: 1px solid #0ea5e9;
+}
+
+/* Total Sell Chart */
+.total-sell-chart {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+    border: 2px solid #0ea5e9;
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.2) !important;
+}
+
+.chart-bar {
+    background: linear-gradient(to top, #0ea5e9, #06b6d4) !important;
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3);
+}
+
+.chart-bar.highlight {
+    background: linear-gradient(to top, #06b6d4, #0ea5e9) !important;
+    box-shadow: 0 4px 16px rgba(14, 165, 233, 0.5);
+}
+
+.chart-label {
+    color: #94a3b8 !important;
+}
+
+/* Project Image */
+.project-image {
+    background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #0f172a 100%) !important;
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .kpi-card:hover {
+        transform: translateY(-4px) !important;
+    }
+    
+    .project-card,
+    .chart-card,
+    .sales-report,
+    .total-sell-chart {
+        border-width: 1px !important;
+    }
+}
+
+/* Additional Teal Accents */
+.nav-icon {
+    color: #0ea5e9 !important;
+}
+
+.search-icon {
+    color: #0ea5e9 !important;
+}
+
+.notification-dot {
+    background: #06b6d4 !important;
+    box-shadow: 0 0 8px rgba(6, 182, 212, 0.6);
+}
+
+/* Smooth Transitions */
+* {
+    transition: all 0.3s ease;
+}
+
+/* Custom Scrollbar */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(14, 165, 233, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #06b6d4, #0ea5e9);
+}
+
+/* Additional Teal and Navy Blue Enhancements */
+.dashboard-layout::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(15, 23, 42, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Glowing Effects */
+.kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(6, 182, 212, 0.1));
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.kpi-card:hover::before {
+    opacity: 1;
+}
+
+/* Animated Background Pattern */
+.project-card::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #0ea5e9, #06b6d4, #0ea5e9, #06b6d4);
+    background-size: 400% 400%;
+    border-radius: 14px;
+    z-index: -1;
+    animation: gradientShift 3s ease infinite;
+    opacity: 0.7;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Teal Glow on Hover */
+.nav-link:hover .nav-icon {
+    text-shadow: 0 0 8px rgba(14, 165, 233, 0.6);
+    transform: scale(1.1);
+}
+
+/* Status Badge Enhancements */
+.status-badge {
+    position: relative;
+    overflow: hidden;
+}
+
+.status-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.status-badge:hover::before {
+    left: 100%;
+}
+
+/* Chart Bar Animation */
+.chart-bar {
+    position: relative;
+    overflow: hidden;
+}
+
+.chart-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), transparent, rgba(255, 255, 255, 0.1));
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.chart-bar:hover::before {
+    transform: translateX(100%);
+}
+
+/* Logo Animation */
+.logo-icon {
+    position: relative;
+    overflow: hidden;
+}
+
+.logo-icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), transparent, rgba(255, 255, 255, 0.2));
+    transform: translateX(-100%);
+    animation: logoShine 2s ease-in-out infinite;
+}
+
+@keyframes logoShine {
+    0% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Search Bar Focus Effect */
+.search-input:focus {
+    animation: searchPulse 0.3s ease;
+}
+
+@keyframes searchPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+/* Notification Bell Animation */
+.notification-btn {
+    animation: bellRing 2s ease-in-out infinite;
+}
+
+@keyframes bellRing {
+    0%, 100% { transform: rotate(0deg); }
+    10%, 30% { transform: rotate(-10deg); }
+    20%, 40% { transform: rotate(10deg); }
+    50% { transform: rotate(0deg); }
+}
+
+/* Profile Section Hover Effect */
+.profile-section:hover {
+    background: rgba(14, 165, 233, 0.1);
+    border-radius: 8px;
+    padding: 4px 8px;
+    transition: all 0.3s ease;
+}
+
+/* Table Row Hover Enhancement */
+.sales-table tr {
+    transition: all 0.3s ease;
+}
+
+.sales-table tr:hover {
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(6, 182, 212, 0.1)) !important;
+    transform: translateX(4px);
+}
+
+/* KPI Value Counter Animation */
+.kpi-value {
+    animation: countUp 1s ease-out;
+}
+
+@keyframes countUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

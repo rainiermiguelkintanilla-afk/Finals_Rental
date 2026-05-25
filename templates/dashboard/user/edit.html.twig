@@ -1,0 +1,50 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Edit User - Rental Management{% endblock %}
+
+{% block header_title %}Edit User{% endblock %}
+
+{% block dashboard_content %}
+<div class="container" style="padding: 20px; max-width: 800px;">
+    <div style="background: white; padding: 30px; border-radius: 8px;">
+        {{ form_start(form, {'attr': {'class': 'form'}}) }}
+        
+        <div style="margin-bottom: 20px;">
+            {{ form_label(form.email, 'Email', {'label_attr': {'style': 'display: block; margin-bottom: 5px; font-weight: bold;'}}) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;'}}) }}
+            {{ form_errors(form.email) }}
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            {{ form_label(form.password, 'Password', {'label_attr': {'style': 'display: block; margin-bottom: 5px; font-weight: bold;'}}) }}
+            {{ form_widget(form.password, {'attr': {'class': 'form-control', 'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;'}}) }}
+            {{ form_help(form.password) }}
+            {{ form_errors(form.password) }}
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            {{ form_label(form.roles, 'Roles', {'label_attr': {'style': 'display: block; margin-bottom: 5px; font-weight: bold;'}}) }}
+            {{ form_widget(form.roles, {'attr': {'style': 'margin-top: 10px;'}}) }}
+            {{ form_errors(form.roles) }}
+            {% if is_last_admin is defined and is_last_admin %}
+                <div style="margin-top: 10px; padding: 10px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; color: #856404;">
+                    Warning: This is the last admin user. You cannot remove admin role.
+                </div>
+            {% endif %}
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <button type="submit" style="padding: 10px 20px; background: #20b2aa; color: white; border: none; border-radius: 4px; cursor: pointer;">Update User</button>
+            <a href="{{ path('app_user_index') }}" style="padding: 10px 20px; background: #6c757d; color: white; text-decoration: none; border-radius: 4px;">Cancel</a>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+

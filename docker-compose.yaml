@@ -1,0 +1,38 @@
+services:
+    # BASICS:   Image, Evironment, Port , Volumnes, Network
+    mysql:
+        image: mysql:8.0
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} # FOR SUPER ADMIN
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER} 
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        ports:
+            - "3307:3306" #[application itself, docker port]
+        volumes:
+            - mysql_data:/var/lib/mysql
+        networks:
+            - app-network
+        
+        
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        restart: unless-stopped
+        environment:
+            PMA_HOST: mysql  # FOR SUPER ADMIN
+            PMA_USER: ${MYSQL_USER} 
+            PMA_PASSWORD: ${MYSQL_PASSWORD}
+        ports:
+            - "8080:80"
+        depends_on:
+            - mysql
+        networks:
+            - app-network
+
+volumes:
+    mysql_data:
+
+networks:
+    app-network:
+    

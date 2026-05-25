@@ -1,0 +1,253 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register - Rental Apartment{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @font-face {
+            font-family: 'SITKAVF';
+            src: url('{{ asset('fonts/SITKAVF-Small.TTF') }}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'SITKAVF';
+            src: url('{{ asset('fonts/SITKAVF-SmallBold.TTF') }}') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SITKAVF', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, rgba(10, 26, 46, 0.92), rgba(22, 33, 62, 0.88)),
+                url('{{ asset('img/Community.jpg') }}') center / cover no-repeat;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 90px; /* fixed global navbar */
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26, 75, 92, 0.4);
+            z-index: 1;
+        }
+
+        .auth-page {
+            min-height: calc(100vh - 90px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Registration Container */
+        .register-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 50px;
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .register-title {
+            font-size: 32px;
+            color: #1a4b5c;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .register-subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #20b2aa;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(32, 178, 170, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: #999;
+        }
+
+        .register-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #20b2aa, #008b8b);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(32, 178, 170, 0.3);
+        }
+
+        .login-link {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #20b2aa;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-error {
+            background: #fee;
+            color: #c33;
+            border: 1px solid #fcc;
+        }
+
+        .alert-success {
+            background: #efe;
+            color: #3c3;
+            border: 1px solid #cfc;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .register-container {
+                margin: 20px;
+                padding: 30px;
+            }
+            
+            .register-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<!-- Registration Form -->
+<div class="auth-page">
+<div class="register-container">
+    <div class="register-header">
+        <h1 class="register-title">Create Account</h1>
+        <p class="register-subtitle">Sign up for your Rainier's Real Estate account</p>
+    </div>
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-error">{{ message }}</div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(registrationForm) }}
+        {{ form_errors(registrationForm) }}
+        <div class="form-group">
+            {{ form_label(registrationForm.email) }}
+            {{ form_widget(registrationForm.email) }}
+            {{ form_errors(registrationForm.email) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(registrationForm.fullName) }}
+            {{ form_widget(registrationForm.fullName) }}
+            {{ form_errors(registrationForm.fullName) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(registrationForm.plainPassword.first) }}
+            {{ form_widget(registrationForm.plainPassword.first) }}
+            {{ form_errors(registrationForm.plainPassword.first) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(registrationForm.plainPassword.second) }}
+            {{ form_widget(registrationForm.plainPassword.second) }}
+            {{ form_errors(registrationForm.plainPassword.second) }}
+        </div>
+
+        <button type="submit" class="register-btn">Sign Up</button>
+
+        <div class="login-link">
+            Already have an account? <a href="{{ path('app_login') }}">Sign in here</a>
+        </div>
+    {{ form_end(registrationForm) }}
+</div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

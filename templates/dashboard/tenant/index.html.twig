@@ -1,0 +1,315 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Tenants - Rental Management{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/rentals.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/dashboard-tenant.css') }}">
+    <style>
+        .tenants-container {
+            padding: 20px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 12px;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .tenants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .tenant-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .tenant-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .tenant-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .tenant-contact {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .tenant-contact div {
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .tenant-contact div:last-child {
+            margin-bottom: 0;
+        }
+
+        .apartment-info {
+            background: #e0e7ff;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .apartment-name {
+            color: #4f46e5;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .tenant-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .detail-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-inactive {
+            background: #fee2e2;
+            color: #7f1d1d;
+        }
+
+        .move-out-date {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .tenant-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .tenant-actions form {
+            display: inline;
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .tenants-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tenant-actions {
+                flex-direction: column;
+            }
+
+            .tenant-actions .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="tenants-container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span style="color: #667eea;">👥</span> Tenants Management
+        </h1>
+        <a href="{{ path('app_tenant_new') }}" class="btn btn-primary">+ Add New Tenant</a>
+    </div>
+
+    {% if tenants is empty %}
+        <div class="empty-state">
+            <div style="font-size: 48px; margin-bottom: 20px;">👤</div>
+            <h3>No tenants found</h3>
+            <p>Start by adding your first tenant to manage their information and leases.</p>
+            <a href="{{ path('app_tenant_new') }}" class="btn btn-primary">Add First Tenant</a>
+        </div>
+    {% else %}
+        <div style="margin-bottom: 20px; color: #666; font-weight: 600;">
+            Total Tenants: <span style="color: #667eea; font-size: 18px;">{{ tenants|length }}</span>
+        </div>
+        <div class="tenants-grid">
+            {% for tenant in tenants %}
+                <div class="tenant-card">
+                    <div class="tenant-name">{{ tenant.fullName }}</div>
+                    <div class="tenant-contact">
+                        <div><strong>📧</strong> {{ tenant.email }}</div>
+                        <div><strong>📱</strong> {{ tenant.phone }}</div>
+                    </div>
+                    
+                    {% if tenant.getCurrentApartment() %}
+                        <div class="apartment-info">
+                            <div class="apartment-name">🏠 {{ tenant.getCurrentApartment().name }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="tenant-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Move-in Date</div>
+                            <div class="detail-value">{{ tenant.moveInDate|date('M d, Y') }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Status</div>
+                            <div class="detail-value">
+                                <span class="status-badge status-{{ tenant.status|lower }}">{{ tenant.status|title }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if tenant.moveOutDate %}
+                        <div class="move-out-date">
+                            📅 Moved out: {{ tenant.moveOutDate|date('M d, Y') }}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="tenant-actions">
+                        <a href="{{ path('app_tenant_show', {'id': tenant.id}) }}" class="btn btn-primary btn-sm">View</a>
+                        <a href="{{ path('app_tenant_edit', {'id': tenant.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form method="post" action="{{ path('app_tenant_delete', {'id': tenant.id}) }}" onsubmit="return confirm('Are you sure you want to delete this tenant?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tenant.id) }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

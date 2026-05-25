@@ -1,0 +1,147 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Activity Logs - Rental Management{% endblock %}
+
+{% block header_title %}Activity Logs{% endblock %}
+
+{% block dashboard_content %}
+<div class="container" style="padding: 20px;">
+    <style>
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+        button:hover, a:hover {
+            opacity: 0.9;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: #20b2aa;
+            box-shadow: 0 0 0 2px rgba(32, 178, 170, 0.2);
+        }
+        table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+    <div class="page-header" style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1 class="page-title">Activity Logs</h1>
+                <p style="color: #666; margin: 5px 0 0 0;">View all system activities and user actions</p>
+            </div>
+            <div style="background: #f8f9fa; padding: 10px 15px; border-radius: 8px;">
+                <strong style="color: #333;">Total Records: {{ total_logs }}</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+        <h3 style="margin: 0 0 15px 0; color: #333; font-size: 16px;">Filters</h3>
+        <form method="GET" action="{{ path('app_activity_log_index') }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end;">
+            <div>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333; font-size: 14px;">User</label>
+                <select name="user" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    <option value="">All Users</option>
+                    {% for user in users %}
+                        <option value="{{ user.id }}" {{ filters.user == user.id ? 'selected' : '' }}>{{ user.email }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333; font-size: 14px;">Action</label>
+                <select name="action" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    <option value="">All Actions</option>
+                    <option value="create" {{ filters.action == 'create' ? 'selected' : '' }}>Create</option>
+                    <option value="update" {{ filters.action == 'update' ? 'selected' : '' }}>Update</option>
+                    <option value="delete" {{ filters.action == 'delete' ? 'selected' : '' }}>Delete</option>
+                    <option value="login" {{ filters.action == 'login' ? 'selected' : '' }}>Login</option>
+                    <option value="logout" {{ filters.action == 'logout' ? 'selected' : '' }}>Logout</option>
+                </select>
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333; font-size: 14px;">Date From</label>
+                <input type="date" name="date_from" value="{{ filters.date_from }}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333; font-size: 14px;">Date To</label>
+                <input type="date" name="date_to" value="{{ filters.date_to }}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+            </div>
+            <div>
+                <button type="submit" style="padding: 10px 20px; background: #20b2aa; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.3s;">Filter</button>
+                <a href="{{ path('app_activity_log_index') }}" style="padding: 10px 20px; background: #6c757d; color: white; text-decoration: none; border-radius: 6px; display: inline-block; margin-left: 10px; font-weight: 600;">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    {% if logs is empty %}
+        <div class="empty-state" style="text-align: center; padding: 40px;">
+            <h3>No activity logs found</h3>
+        </div>
+    {% else %}
+        <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+            <thead>
+                <tr style="background: #f8f9fa;">
+                    <th style="padding: 15px; text-align: left; border-bottom: 2px solid #dee2e6;">ID</th>
+                    <th style="padding: 15px; text-align: left; border-bottom: 2px solid #dee2e6;">User</th>
+                    <th style="padding: 15px; text-align: left; border-bottom: 2px solid #dee2e6;">Role</th>
+                    <th style="padding: 15px; text-align: left; border-bottom: 2px solid #dee2e6;">Action</th>
+                    <th style="padding: 15px; text-align: left; border-bottom: 2px solid #dee2e6;">Entity</th>
+                    <th style="padding: 15px; text-align: left; border-bottom: 2px solid #dee2e6;">Description</th>
+                    <th style="padding: 15px; text-align: left; border-bottom: 2px solid #dee2e6;">Date/Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr style="border-bottom: 1px solid #dee2e6;">
+                    <td style="padding: 15px;">{{ log.id }}</td>
+                    <td style="padding: 15px;">{{ log.userEmail }}</td>
+                    <td style="padding: 15px;">
+                        <span style="padding: 5px 10px; background: {{ log.userRole == 'ROLE_ADMIN' ? '#dc3545' : '#20b2aa' }}; color: white; border-radius: 4px; font-size: 12px;">
+                            {{ log.userRole == 'ROLE_ADMIN' ? 'Admin' : (log.userRole == 'ROLE_STAFF' ? 'Staff' : 'User') }}
+                        </span>
+                    </td>
+                    <td style="padding: 15px;">
+                        <span style="padding: 5px 10px; background: 
+                            {% if log.action == 'login' or log.action == 'logout' %}#17a2b8
+                            {% elseif log.action == 'create' %}#28a745
+                            {% elseif log.action == 'update' %}#ffc107
+                            {% elseif log.action == 'delete' %}#dc3545
+                            {% else %}#6c757d
+                            {% endif %}; 
+                            color: white; border-radius: 4px; font-size: 12px; text-transform: uppercase;">
+                            {{ log.action }}
+                        </span>
+                    </td>
+                    <td style="padding: 15px;">{{ log.entityType ?? 'N/A' }}</td>
+                    <td style="padding: 15px;">{{ log.description ?? 'N/A' }}</td>
+                    <td style="padding: 15px;">{{ log.createdAt|date('Y-m-d H:i:s') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="color: #666; font-size: 14px;">
+                Showing <strong>{{ logs|length }}</strong> of <strong>{{ total_logs }}</strong> records
+                {% if filters.user or filters.action or filters.date_from or filters.date_to %}
+                    <span style="color: #20b2aa;">(filtered)</span>
+                {% endif %}
+            </div>
+            {% if total_pages > 1 %}
+            <div style="display: flex; gap: 10px; align-items: center;">
+                {% if current_page > 1 %}
+                    <a href="{{ path('app_activity_log_index', {'page': current_page - 1, 'user': filters.user, 'action': filters.action, 'date_from': filters.date_from, 'date_to': filters.date_to}) }}" style="padding: 8px 15px; background: #20b2aa; color: white; text-decoration: none; border-radius: 4px; transition: background 0.3s; font-size: 14px;">Previous</a>
+                {% endif %}
+                <span style="padding: 8px 15px; color: #666; font-size: 14px;">Page {{ current_page }} of {{ total_pages }}</span>
+                {% if current_page < total_pages %}
+                    <a href="{{ path('app_activity_log_index', {'page': current_page + 1, 'user': filters.user, 'action': filters.action, 'date_from': filters.date_from, 'date_to': filters.date_to}) }}" style="padding: 8px 15px; background: #20b2aa; color: white; text-decoration: none; border-radius: 4px; transition: background 0.3s; font-size: 14px;">Next</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

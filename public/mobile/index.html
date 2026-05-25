@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a">
+    <title>Rainier Rentals — Customer App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <header class="app-header">
+            <img src="/assets/img/secondarylogo.png" alt="Logo" class="logo" onerror="this.style.display='none'">
+            <h1>Rainier Rentals</h1>
+            <p class="tagline">Customer mobile portal</p>
+        </header>
+
+        <section id="auth-screen" class="screen">
+            <div class="card">
+                <h2 id="auth-title">Sign in</h2>
+                <p id="auth-error" class="error" hidden></p>
+                <form id="auth-form">
+                    <label>
+                        Email
+                        <input type="email" name="email" required autocomplete="email">
+                    </label>
+                    <label id="fullname-field" hidden>
+                        Full name
+                        <input type="text" name="fullName" autocomplete="name">
+                    </label>
+                    <label id="phone-field" hidden>
+                        Phone
+                        <input type="tel" name="phone" autocomplete="tel">
+                    </label>
+                    <label>
+                        Password
+                        <input type="password" name="password" required minlength="8" autocomplete="current-password">
+                    </label>
+                    <button type="submit" class="btn btn-primary" id="auth-submit">Sign in</button>
+                </form>
+                <button type="button" class="btn-link" id="toggle-auth-mode">Create an account</button>
+            </div>
+        </section>
+
+        <section id="main-screen" class="screen" hidden>
+            <div id="customer-bar" class="customer-bar" hidden>
+                <div class="customer-bar-text">
+                    <p class="customer-bar-label">Signed in as</p>
+                    <p id="customer-display-name" class="customer-bar-name">—</p>
+                    <p id="customer-display-email" class="customer-bar-email">—</p>
+                </div>
+                <span class="customer-badge">Customer</span>
+            </div>
+
+            <nav class="tabs" role="tablist">
+                <button type="button" class="tab active" data-tab="apartments">Browse</button>
+                <button type="button" class="tab" data-tab="bookings">Bookings</button>
+                <button type="button" class="tab" data-tab="payments">Payments</button>
+                <button type="button" class="tab" data-tab="profile">Profile</button>
+            </nav>
+
+            <div id="tab-apartments" class="tab-panel">
+                <div id="apartments-list" class="list"></div>
+            </div>
+
+            <div id="tab-bookings" class="tab-panel" hidden>
+                <div id="bookings-list" class="list"></div>
+                <div id="booking-form-wrap" class="card" hidden>
+                    <h3>Request booking</h3>
+                    <form id="booking-form">
+                        <input type="hidden" name="apartmentId" id="booking-apartment-id">
+                        <p id="booking-apartment-name"></p>
+                        <label>Check-in <input type="date" name="checkInDate" required></label>
+                        <label>Check-out <input type="date" name="checkOutDate" required></label>
+                        <label>Guests <input type="number" name="guests" min="1" value="1" required></label>
+                        <button type="submit" class="btn btn-primary">Submit request</button>
+                        <button type="button" class="btn btn-secondary" id="cancel-booking">Cancel</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="tab-payments" class="tab-panel" hidden>
+                <div id="payments-list" class="list"></div>
+            </div>
+
+            <div id="tab-profile" class="tab-panel" hidden>
+                <div id="profile-content" class="card"></div>
+                <button type="button" class="btn btn-secondary" id="logout-btn">Sign out</button>
+            </div>
+
+            <p id="toast" class="toast" hidden></p>
+        </section>
+    </div>
+    <script src="app.js" type="module"></script>
+</body>
+</html>

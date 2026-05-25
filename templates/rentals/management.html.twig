@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rental Bookings Management{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/rentals.css') }}">
+    <style>
+        .crud-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .crud-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .crud-title {
+            color: #333;
+            margin: 0;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        .table tr:hover {
+            background-color: #f5f5f5;
+        }
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-confirmed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-completed {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+{% block body %}
+<div class="crud-container">
+    <div class="crud-header">
+        <h1 class="crud-title">Rental Bookings Management</h1>
+        <a href="{{ path('app_rentals_new') }}" class="btn btn-primary">+ New Booking</a>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% if client_rentals is empty %}
+        <div class="no-data">
+            <h3>No rental bookings found</h3>
+            <p>Start by creating your first rental booking.</p>
+            <a href="{{ path('app_rentals_new') }}" class="btn btn-primary">Create First Booking</a>
+        </div>
+    {% else %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Client Name</th>
+                    <th>Apartment</th>
+                    <th>Check-in Date</th>
+                    <th>Check-out Date</th>
+                    <th>Guests</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rental in client_rentals %}
+                <tr>
+                    <td>{{ rental.id }}</td>
+                    <td>{{ rental.clientName }}</td>
+                    <td>{{ rental.apartment }}</td>
+                    <td>{{ rental.checkInDate|date('Y-m-d') }}</td>
+                    <td>{{ rental.checkOutDate|date('Y-m-d') }}</td>
+                    <td>{{ rental.guests }}</td>
+                    <td>
+                        <span class="status-badge status-{{ rental.status }}">
+                            {{ rental.status|title }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ path('app_rentals_show', {'id': rental.id}) }}" class="btn btn-success btn-sm">View</a>
+                        <a href="{{ path('app_rentals_edit', {'id': rental.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form method="post" action="{{ path('app_rentals_delete', {'id': rental.id}) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this booking?')">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rental.id) }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+{% endblock %}
+
