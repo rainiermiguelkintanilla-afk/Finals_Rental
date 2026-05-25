@@ -1,7 +1,12 @@
-# Railway — Symfony (see https://docs.railway.com/guides/symfony)
+# Railway — Symfony (https://docs.railway.com/guides/symfony)
 [build]
 builder = "RAILPACK"
 
 [deploy]
-healthcheckPath = "/"
+preDeployCommand = [
+  "php bin/console lexik:jwt:generate-keypair --skip-if-exists",
+  "php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration",
+]
+healthcheckPath = "/health"
+healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
