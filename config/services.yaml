@@ -5,9 +5,13 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     # Google Forms: open form → Send → <> → copy the iframe "src" URL (must include ?embedded=true)
-    contact.google_form_embed_url: '%env(CONTACT_GOOGLE_FORM_EMBED_URL)%'
+    contact.google_form_embed_url: '%env(default:contact_google_form_embed_url:CONTACT_GOOGLE_FORM_EMBED_URL)%'
+    env(contact_google_form_embed_url): ''
     # Optional "From" for Symfony Mailer (e.g. Mailtrap). Falls back to BREVO_SENDER_* in EmailVerificationService when empty.
     env(MAILER_FROM): ''
+    env(BREVO_API_KEY): ''
+    env(BREVO_SENDER_EMAIL): ''
+    env(BREVO_CONTACT_TO_EMAIL): ''
 
 services:
     # default configuration for services in *this* file
