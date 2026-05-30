@@ -13,7 +13,7 @@ class AboutController extends AbstractController
     #[Route('', name: 'app_about_index', methods: ['GET'])]
     public function index(ApartmentRepository $apartmentRepository): Response
     {
-        $apartments = $apartmentRepository->findBy(['status' => 'available'], ['id' => 'DESC'], 6);
+        $apartments = $apartmentRepository->findAvailableForPublic();
 
         return $this->render('about/index.html.twig', [
             'apartments' => $apartments,

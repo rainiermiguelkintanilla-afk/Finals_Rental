@@ -27,16 +27,19 @@ class PublicListingsApiController extends AbstractController
     public function apartments(Request $request, ApartmentRepository $apartmentRepository): JsonResponse
     {
         $status = $request->query->get('status');
-        $criteria = [];
-        if (is_string($status) && $status !== '' && $status !== 'all') {
-            $criteria['status'] = $status;
+        $apartments = $apartmentRepository->findForPublicApi(is_string($status) ? $status : null);
+        $items = array_map([$this, 'serializeApartment'], $apartments);
+        $availableCount = 0;
+        foreach ($items as $row) {
+            if (($row['status'] ?? '') === 'available') {
+                ++$availableCount;
+            }
         }
 
-        $apartments = $apartmentRepository->findBy($criteria, ['id' => 'DESC']);
-
         return ApiResponseFactory::success([
-            'items' => array_map([$this, 'serializeApartment'], $apartments),
+            'items' => $items,
             'total' => count($apartments),
+            'availableCount' => $availableCount,
         ], 'Apartments loaded.');
     }
 

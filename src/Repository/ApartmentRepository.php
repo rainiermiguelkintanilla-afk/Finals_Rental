@@ -33,4 +33,33 @@ class ApartmentRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    /**
+     * @return list<Apartment>
+     */
+    public function findAvailableForPublic(int $limit = 6): array
+    {
+        try {
+            return $this->findBy(['status' => 'available'], ['id' => 'DESC'], $limit);
+        } catch (\Throwable) {
+            return [];
+        }
+    }
+
+    /**
+     * @return list<Apartment>
+     */
+    public function findForPublicApi(?string $status = null): array
+    {
+        try {
+            $criteria = [];
+            if (is_string($status) && $status !== '' && $status !== 'all') {
+                $criteria['status'] = $status;
+            }
+
+            return $this->findBy($criteria, ['id' => 'DESC']);
+        } catch (\Throwable) {
+            return [];
+        }
+    }
 }

@@ -13,7 +13,7 @@ class HomeController extends AbstractController
     public function index(ApartmentRepository $apartmentRepository): Response
     {
         // Fetch available apartments for the Units section
-        $apartments = $apartmentRepository->findBy(['status' => 'available'], ['id' => 'DESC'], 6);
+        $apartments = $apartmentRepository->findAvailableForPublic();
         
         return $this->render('home/index.html.twig', [
             'apartments' => $apartments,
