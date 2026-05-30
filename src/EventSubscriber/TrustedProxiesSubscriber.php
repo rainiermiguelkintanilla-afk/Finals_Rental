@@ -11,8 +11,12 @@ class TrustedProxiesSubscriber implements EventSubscriberInterface
 {
     public function onKernelRequest(RequestEvent $event): void
     {
-        // Only in non-production environments
+        // Production proxy trust is configured in config/packages/framework.yaml.
         if (($_ENV['APP_ENV'] ?? 'dev') === 'prod') {
+            return;
+        }
+
+        if (!$event->isMainRequest()) {
             return;
         }
 
