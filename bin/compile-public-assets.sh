@@ -6,6 +6,9 @@ if [ -z "${DATABASE_URL:-}" ] || echo "${DATABASE_URL}" | grep -q 'railway.inter
   export DATABASE_URL='sqlite:////tmp/rainier-build.db?serverVersion=3&charset=utf8'
 fi
 
+# Download JavaScript vendor assets declared in importmap.php
+php bin/console importmap:install --no-interaction
+
 # Symfony asset mapper (hashed URLs under /assets/)
 php bin/console asset-map:compile --env=prod --no-interaction
 
