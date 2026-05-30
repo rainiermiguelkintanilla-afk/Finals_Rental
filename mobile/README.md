@@ -1,80 +1,89 @@
-# Rainier Rentals — Expo mobile app
+# Rainier Rentals — Expo mobile app (APK)
 
-The native app talks to **Symfony over HTTP** (port **8000**). It does **not** connect to MySQL directly — the backend reads the database and returns JSON.
+Native Android app with **push notifications** for bookings, payments, and maintenance alerts.
+
+## Push notification events
+
+| Event | When |
+|-------|------|
+| Booking submitted / updated / cancelled | Customer + staff |
+| Payment confirmed (PayMongo) | Customer |
+| Payment reminder | 3 days before due date (`app:send-payment-reminders`) |
+| Maintenance alert | Unit marked `maintenance` |
 
 ## Prerequisites
 
-1. **Symfony** running on the PC:
+1. Symfony API running (local or Railway)
+2. Node.js 18+
+3. [Expo account](https://expo.dev) for APK builds
 
-   ```bash
-   symfony server:start
-   ```
-
-2. **MySQL** (Docker):
-
-   ```bash
-   docker compose up -d mysql
-   ```
-
-3. **Physical Android device** on USB with USB debugging enabled.
-
-## Fix “Cannot reach the API”
-
-On a real phone, `http://127.0.0.1:8000` means **the phone itself**, not your PC. Forward port 8000:
+## Setup
 
 ```bash
-npm run adb:reverse
+cd mobile
+npm install
+cp .env.example .env
+# Edit .env — set EXPO_PUBLIC_API_URL to your Symfony URL
 ```
 
-Or:
+Add app icons under `mobile/assets/` (required for build):
+
+- `icon.png` (1024×1024)
+- `splash.png`
+- `adaptive-icon.png`
+
+Or copy the default `assets/` folder from a new Expo app:
 
 ```bash
-%LOCALAPPDATA%\Android\Sdk\platform-tools\adb.exe reverse tcp:8000 tcp:8000
+npx create-expo-app@latest _assets-template --template blank
+# copy _assets-template/assets/* into mobile/assets/
 ```
 
-Re-run `adb:reverse` after unplugging the device or rebooting the phone.
+## Run on device (development)
 
-### Alternative: use your PC’s LAN IP
-
-In the Expo app `.env`:
-
-```env
-EXPO_PUBLIC_API_URL=http://192.168.x.x:8000
+```bash
+npm start
+# Scan QR with Expo Go, or:
+npm run android
 ```
 
-Replace `192.168.x.x` with your Wi‑Fi IPv4 address (phone and PC on the same network).
+For local Symfony on a USB Android device:
 
-## API base URL
-
-Point the app at Symfony, **not** the old Node CMOS server on port 4000:
-
-```env
-EXPO_PUBLIC_API_URL=http://127.0.0.1:8000
+```bash
+npm run adb:reverse   # from repo root
 ```
 
-## Listings (home screen)
+## Register for push
 
-| Endpoint | Auth |
-|----------|------|
-| `GET /api/public/apartments` | None — browse All / Available / Occupied |
-| `GET /api/public/apartments?status=available` | Optional filter |
-| `GET /api/customer/apartments` | JWT + `ROLE_CUSTOMER` |
+1. Sign in with a **customer** account
+2. Allow notifications when prompted
+3. Token is saved via `POST /api/customer/push-token`
 
-Login and account features:
+## Build APK
 
-- `POST /api/login`
-- `POST /api/register`
-- `GET /api/customer/profile` (with `Authorization: Bearer <token>`)
+```bash
+npm install -g eas-cli
+eas login
+eas init   # sets projectId in app.json → extra.eas.projectId
+eas build -p android --profile preview
+```
 
-Online rent payments (PayMongo):
+Download the `.apk` from the Expo dashboard when the build finishes.
 
-- `GET /api/customer/payments` — includes `canPayOnline` per item when PayMongo is configured
-- `POST /api/customer/payments/{id}/checkout` — returns `checkoutUrl` (redirect customer to PayMongo)
-- `POST /api/customer/payments/{id}/sync` — poll after returning from checkout (webhook also marks paid)
-- Set `PAYMONGO_SECRET_KEY` and `PAYMONGO_WEBHOOK_SECRET` in `.env`; webhook URL: `/api/webhooks/paymongo`
+## API endpoints (notifications)
 
-See [docs/API.md](../docs/API.md).
+| Method | Path | Purpose |
+|--------|------|---------|
+| POST | `/api/customer/push-token` | Register Expo push token |
+| DELETE | `/api/customer/push-token` | Remove token on logout |
+| GET/PATCH | `/api/customer/notification-preferences` | Email/push/reminder toggles |
 
-## Browser-based customer app
+## Production (Railway)
 
-If you only need a quick test without Expo: open **http://127.0.0.1:8000/mobile/** in the phone browser (same `adb:reverse` applies).
+Set on **Finals_Rental** service:
+
+- `EXPO_PUBLIC_API_URL` is set in the mobile `.env` at build time (not on server)
+- Optional: `BREVO_API_KEY` + `BREVO_SENDER_EMAIL` for email alerts
+- Schedule daily: `php bin/console app:send-payment-reminders`
+
+Browser fallback (no APK): **https://YOUR_DOMAIN/mobile/** — polls realtime events in-app.

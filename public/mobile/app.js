@@ -441,7 +441,45 @@ function escapeHtml(str) {
     try {
         await showApp();
         await handlePaymentReturn();
+        startRealtimePolling();
     } catch {
         clearSession();
     }
 })();
+
+/** In-app alerts when backend publishes booking/payment events (browser/PWA). APK uses Expo push. */
+function startRealtimePolling() {
+    let since = 0;
+    let bootstrapped = false;
+
+    async function poll() {
+        if (!storage.getToken()) {
+            return;
+        }
+        try {
+            const res = await api(`/api/customer/realtime/events?since=${since}`);
+            const events = res.data?.events || [];
+            if (!bootstrapped) {
+                events.forEach((e) => { since = Math.max(since, e.id || 0); });
+                bootstrapped = true;
+                return;
+            }
+            for (const event of events) {
+                since = Math.max(since, event.id || 0);
+                const label = (event.type || 'update').replace(/\./g, ' ');
+                showToast(`🔔 ${label}`);
+                if (event.type?.startsWith('booking.')) {
+                    loadBookings();
+                }
+                if (event.type?.startsWith('payment.')) {
+                    loadPayments();
+                }
+            }
+        } catch {
+            /* offline */
+        }
+    }
+
+    setInterval(poll, 4000);
+    poll();
+}

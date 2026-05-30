@@ -33,4 +33,23 @@ class PaymentRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    /**
+     * @return list<Payment>
+     */
+    public function findDueWithinDays(int $days): array
+    {
+        $today = new \DateTimeImmutable('today');
+        $until = $today->modify(sprintf('+%d days', $days));
+
+        return $this->createQueryBuilder('p')
+            ->where('p.status != :paid')
+            ->andWhere('p.dueDate >= :today')
+            ->andWhere('p.dueDate <= :until')
+            ->setParameter('paid', 'paid')
+            ->setParameter('today', $today)
+            ->setParameter('until', $until)
+            ->getQuery()
+            ->getResult();
+    }
 }

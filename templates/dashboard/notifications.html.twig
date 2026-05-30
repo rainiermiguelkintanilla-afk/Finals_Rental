@@ -1,0 +1,24 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block body %}
+<div class="dashboard-page">
+    <h1>Notifications</h1>
+    <p class="meta">Push alerts are sent to the customer mobile app (APK) and staff devices when enabled in Settings.</p>
+
+    <div class="settings-section" style="margin-top: 1.5rem;">
+        <div class="settings-title">Alert types</div>
+        <ul>
+            <li><strong>Booking updates</strong> — status changes on rental requests</li>
+            <li><strong>Payment confirmed</strong> — PayMongo rent payments</li>
+            <li><strong>Payment reminders</strong> — due within 3 days (daily cron: <code>app:send-payment-reminders</code>)</li>
+            <li><strong>Maintenance</strong> — when a unit is marked for maintenance</li>
+        </ul>
+    </div>
+
+    <p style="margin-top: 1rem;">
+        <a href="{{ path('app_dashboard_settings') }}" class="btn btn-primary">Notification preferences</a>
+    </p>
+</div>
+{% endblock %}

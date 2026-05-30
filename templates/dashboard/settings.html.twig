@@ -220,7 +220,15 @@
                         <div class="settings-item-label">Email Notifications</div>
                         <div class="settings-item-description">Receive updates via email</div>
                     </div>
-                    <div class="toggle-switch active" id="emailToggle" onclick="toggleSwitch(this)"></div>
+                    <div class="toggle-switch {{ user.notifyEmail ? 'active' : '' }}" id="emailToggle" onclick="toggleSwitch(this)"></div>
+                </div>
+
+                <div class="settings-item">
+                    <div class="settings-item-info">
+                        <div class="settings-item-label">Push Notifications</div>
+                        <div class="settings-item-description">Mobile app alerts (APK)</div>
+                    </div>
+                    <div class="toggle-switch {{ user.notifyPush ? 'active' : '' }}" id="pushToggle" onclick="toggleSwitch(this)"></div>
                 </div>
 
                 <div class="settings-item">
@@ -228,7 +236,7 @@
                         <div class="settings-item-label">Payment Reminders</div>
                         <div class="settings-item-description">Get notified about upcoming payments</div>
                     </div>
-                    <div class="toggle-switch active" id="paymentToggle" onclick="toggleSwitch(this)"></div>
+                    <div class="toggle-switch {{ user.notifyPaymentReminders ? 'active' : '' }}" id="paymentToggle" onclick="toggleSwitch(this)"></div>
                 </div>
 
                 <div class="settings-item">
@@ -236,7 +244,7 @@
                         <div class="settings-item-label">Maintenance Alerts</div>
                         <div class="settings-item-description">Be notified of property maintenance</div>
                     </div>
-                    <div class="toggle-switch" id="maintenanceToggle" onclick="toggleSwitch(this)"></div>
+                    <div class="toggle-switch {{ user.notifyMaintenance ? 'active' : '' }}" id="maintenanceToggle" onclick="toggleSwitch(this)"></div>
                 </div>
             </div>
 
@@ -381,6 +389,12 @@
         maintenanceAlerts.name = 'maintenanceAlerts';
         maintenanceAlerts.value = document.getElementById('maintenanceToggle').classList.contains('active') ? '1' : '0';
         this.appendChild(maintenanceAlerts);
+
+        const pushNotifications = document.createElement('input');
+        pushNotifications.type = 'hidden';
+        pushNotifications.name = 'pushNotifications';
+        pushNotifications.value = document.getElementById('pushToggle').classList.contains('active') ? '1' : '0';
+        this.appendChild(pushNotifications);
 
         const twoFactorAuth = document.createElement('input');
         twoFactorAuth.type = 'hidden';

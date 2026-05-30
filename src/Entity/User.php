@@ -41,6 +41,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Tenant $tenant = null;
 
+    #[ORM\Column(options: ['default' => true])]
+    private bool $notifyEmail = true;
+
+    #[ORM\Column(options: ['default' => true])]
+    private bool $notifyPush = true;
+
+    #[ORM\Column(options: ['default' => true])]
+    private bool $notifyPaymentReminders = true;
+
+    #[ORM\Column(options: ['default' => true])]
+    private bool $notifyMaintenance = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -183,5 +195,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this->email ?? 'User';
+    }
+
+    public function isNotifyEmail(): bool
+    {
+        return $this->notifyEmail;
+    }
+
+    public function setNotifyEmail(bool $notifyEmail): static
+    {
+        $this->notifyEmail = $notifyEmail;
+
+        return $this;
+    }
+
+    public function isNotifyPush(): bool
+    {
+        return $this->notifyPush;
+    }
+
+    public function setNotifyPush(bool $notifyPush): static
+    {
+        $this->notifyPush = $notifyPush;
+
+        return $this;
+    }
+
+    public function isNotifyPaymentReminders(): bool
+    {
+        return $this->notifyPaymentReminders;
+    }
+
+    public function setNotifyPaymentReminders(bool $notifyPaymentReminders): static
+    {
+        $this->notifyPaymentReminders = $notifyPaymentReminders;
+
+        return $this;
+    }
+
+    public function isNotifyMaintenance(): bool
+    {
+        return $this->notifyMaintenance;
+    }
+
+    public function setNotifyMaintenance(bool $notifyMaintenance): static
+    {
+        $this->notifyMaintenance = $notifyMaintenance;
+
+        return $this;
     }
 }

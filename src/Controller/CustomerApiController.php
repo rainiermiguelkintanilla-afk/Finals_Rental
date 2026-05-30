@@ -91,10 +91,18 @@ class CustomerApiController extends AbstractController
     {
         // Same inventory as staff dashboard — customers see every listing with its live status.
         $apartments = $apartmentRepository->findBy([], ['id' => 'DESC']);
+        $items = array_map([$this, 'serializeApartment'], $apartments);
+        $availableCount = 0;
+        foreach ($items as $row) {
+            if (($row['status'] ?? '') === 'available') {
+                ++$availableCount;
+            }
+        }
 
         return ApiResponseFactory::success([
-            'items' => array_map([$this, 'serializeApartment'], $apartments),
+            'items' => $items,
             'total' => count($apartments),
+            'availableCount' => $availableCount,
         ], 'Apartments loaded.');
     }
 
@@ -320,6 +328,10 @@ class CustomerApiController extends AbstractController
             'fullName' => $user->getFullName(),
             'roles' => $user->getRoles(),
             'tenantId' => $user->getTenant()?->getId(),
+            'notifyEmail' => $user->isNotifyEmail(),
+            'notifyPush' => $user->isNotifyPush(),
+            'notifyPaymentReminders' => $user->isNotifyPaymentReminders(),
+            'notifyMaintenance' => $user->isNotifyMaintenance(),
         ];
     }
 

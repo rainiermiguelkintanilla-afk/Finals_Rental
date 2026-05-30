@@ -16,6 +16,16 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    public function findOneByTenantId(int $tenantId): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->where('IDENTITY(u.tenant) = :tenantId')
+            ->setParameter('tenantId', $tenantId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

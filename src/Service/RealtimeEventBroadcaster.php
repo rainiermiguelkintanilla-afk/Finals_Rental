@@ -15,6 +15,7 @@ final class RealtimeEventBroadcaster
 
     public function __construct(
         private readonly CacheInterface $cache,
+        private readonly PushNotificationDispatcher $pushNotifications,
     ) {
     }
 
@@ -34,6 +35,8 @@ final class RealtimeEventBroadcaster
             $events = array_slice($events, -self::MAX_EVENTS);
         }
         $this->writeEvents($events);
+
+        $this->pushNotifications->dispatch($type, $payload);
     }
 
     /**

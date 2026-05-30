@@ -182,9 +182,13 @@ class DashboardController extends AbstractController
                 return $this->redirectToRoute('app_dashboard_settings');
             }
             
-            // For now, we'll just show a success message
-            // In a real application, you'd save these to a user preferences table or entity
-            $this->addFlash('success', 'Settings saved successfully!');
+            $user->setNotifyEmail($request->request->getBoolean('emailNotifications'));
+            $user->setNotifyPaymentReminders($request->request->getBoolean('paymentReminders'));
+            $user->setNotifyMaintenance($request->request->getBoolean('maintenanceAlerts'));
+            $user->setNotifyPush($request->request->getBoolean('pushNotifications', true));
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Notification settings saved successfully!');
             return $this->redirectToRoute('app_dashboard_settings');
         }
 

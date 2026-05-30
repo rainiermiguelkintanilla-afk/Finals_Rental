@@ -51,6 +51,25 @@ class LeaseRepository extends ServiceEntityRepository
     }
 
     /**
+     * Find active leases for an apartment (for maintenance alerts).
+     *
+     * @return list<Lease>
+     */
+    public function findActiveByApartment(int $apartmentId): array
+    {
+        return $this->createQueryBuilder('l')
+            ->where('l.apartment = :apartmentId')
+            ->andWhere('l.status = :status')
+            ->andWhere('l.startDate <= :now')
+            ->andWhere('l.endDate >= :now')
+            ->setParameter('apartmentId', $apartmentId)
+            ->setParameter('status', 'active')
+            ->setParameter('now', new \DateTime())
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Find leases by apartment
      */
     public function findByApartment(int $apartmentId): array
