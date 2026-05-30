@@ -1,6 +1,11 @@
 #!/usr/bin/env sh
 set -eu
 
+# Railway build has no MySQL — use SQLite so console commands do not fail on cache warmup.
+if [ -z "${DATABASE_URL:-}" ] || echo "${DATABASE_URL}" | grep -q 'railway.internal'; then
+  export DATABASE_URL='sqlite:////tmp/rainier-build.db?serverVersion=3&charset=utf8'
+fi
+
 # Symfony asset mapper (hashed URLs under /assets/)
 php bin/console asset-map:compile --env=prod --no-interaction
 
