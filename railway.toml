@@ -1,7 +1,7 @@
 # Railway — Symfony (https://docs.railway.com/guides/symfony)
 [build]
 builder = "RAILPACK"
-buildCommand = "composer install --no-dev --optimize-autoloader --no-interaction && sh bin/compile-public-assets.sh"
+buildCommand = "composer install --no-dev --optimize-autoloader --no-interaction --no-scripts && sh bin/compile-public-assets.sh"
 
 [deploy]
 preDeployCommand = "php bin/console lexik:jwt:generate-keypair --skip-if-exists && php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration && sh bin/compile-public-assets.sh && php bin/console app:create-admin-user rainiermiguelkintanilla@gmail.com -p sazsad || true"
